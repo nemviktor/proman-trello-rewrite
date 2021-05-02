@@ -21,6 +21,11 @@ export let dataHandler = {
         // sends the data to the API, and calls callback function
     },
     init: function () {
+        let createBoardButton = document.querySelector('#new-board');
+        createBoardButton.addEventListener('click', function() {
+            let boardTitle = prompt('Give me a new board title');
+
+        })
     },
     getBoards: function (callback) {
         // the boards are retrieved and then the callback function is called with the boards
@@ -53,9 +58,24 @@ export let dataHandler = {
     },
     createNewBoard: function (boardTitle, callback) {
         // creates new board, saves it and calls the callback function with its data
+
     },
     createNewCard: function (cardTitle, boardId, statusId, callback) {
         // creates new card, saves it and calls the callback function with its data
+    },
+    renameBoard: function() {
+        let boards = document.querySelectorAll('.board-title');
+        console.log(boards)
+        for (let board of boards){
+            board.addEventListener('click', (event) => {
+                let new_name = prompt('New name:');
+                event.target.innerHTML = new_name;
+               console.log(event.target);
+
+            })
+        }
+
     }
-    // here comes more features
+
+
 };

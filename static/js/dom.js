@@ -9,6 +9,9 @@ export let dom = {
         // retrieves boards and makes showBoards called
         dataHandler.getBoards(function(boards){
             dom.showBoards(boards);
+            //Rename boards
+            dataHandler.renameBoard();
+            dom.toggleBoard();
         });
     },
     showBoards: function (boards) {
@@ -77,15 +80,23 @@ export let dom = {
 
             let statuses = ['new', 'in_progress', 'testing', 'done'];
             for (let status_ of statuses) {
-                console.log(status_)
                 let cardContainer = document.querySelectorAll(`.board-column-content.${status_}`);
                 if (card.board_id === boardId && card.status_id === status_ ) {
-                    console.log(card.board_id)
                     cardContainer[(card.board_id)-1].insertAdjacentHTML("beforeend", cardList);
                 }
             }
         }
 
     },
+    toggleBoard: function(){
+        let board_toggles = document.querySelectorAll('.button-toggle');
+        for (let board_toggle of board_toggles) {
+            board_toggle.addEventListener('click', function(event) {
+                event.target.parentElement.nextElementSibling;
+                console.log(event.target.parentElement.nextElementSibling);
+            })
+        }
+
+    }
     // here comes more features
 };
