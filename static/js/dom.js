@@ -19,14 +19,40 @@ export let dom = {
 
         for(let board of boards){
             boardList += `
-                <li>${board.title}</li>
+                <section class="board" id="${board.id}">
+                    <div class="board-header">
+                        <span class="board-title">${board.title}
+                        </span> 
+                        <button class="board-add">Add Card</button>
+                        <button class="board-toggle"><i class="fas fa-chevron-down"></i></button>
+                    </div>
+                    <div class="board-columns">
+                        <div class="board-column">
+                             <div class="board-column-title">New</div>
+                             <div class="board-column-content new"></div>
+                         </div>
+                         <div class="board-column">
+                             <div class="board-column-title">In progress</div>
+                             <div class="board-column-content in_progress"></div>
+                         </div>
+                         <div class="board-column">
+                             <div class="board-column-title">Testing</div>
+                             <div class="board-column-content testing"></div>
+                         </div>
+                         <div class="board-column">
+                             <div class="board-column-title">Done</div>
+                             <div class="board-column-content done"></div>
+                         </div>                
+                    </div>
+                </section>
             `;
+            this.loadCards(board.id);
         }
 
         const outerHtml = `
-            <ul class="board-container">
+            <div class="board-container">
                 ${boardList}
-            </ul>
+            </div>
         `;
 
         let boardsContainer = document.querySelector('#boards');
@@ -34,10 +60,32 @@ export let dom = {
     },
     loadCards: function (boardId) {
         // retrieves cards and makes showCards called
+        dataHandler.getCardsByBoardId(boardId, function(cards) {
+            dom.showCards(cards, boardId);
+            })
     },
-    showCards: function (cards) {
+    showCards: function (cards, boardId) {
         // shows the cards of a board
         // it adds necessary event listeners also
+        let cardList = '';
+
+        for(let card of cards) {
+            cardList = `<div class="card">
+                            <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
+                            <div class="card-title">${card.title}</div>
+                         </div>`
+
+            let statuses = ['new', 'in_progress', 'testing', 'done'];
+            for (let status_ of statuses) {
+                console.log(status_)
+                let cardContainer = document.querySelectorAll(`.board-column-content.${status_}`);
+                if (card.board_id === boardId && card.status_id === status_ ) {
+                    console.log(card.board_id)
+                    cardContainer[(card.board_id)-1].insertAdjacentHTML("beforeend", cardList);
+                }
+            }
+        }
+
     },
     // here comes more features
 };
