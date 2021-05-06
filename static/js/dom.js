@@ -2,18 +2,21 @@
 import { dataHandler } from "./data_handler.js";
 
 export let dom = {
+    // newBoardButton : document.querySelector('#new-board'),
     init: function () {
         // This function should run once, when the page is loaded.
     },
     loadBoards: function () {
         // retrieves boards and makes showBoards called
         dataHandler.getBoards(function(boards){
-            dom.showBoards(boards);
-            //Rename boards
-            dataHandler.renameBoard();
-            dom.toggleBoard();
+        dom.showBoards(boards);
+        //Rename boards
+        dataHandler.renameBoard();
+        dom.toggleBoard();
+        document.querySelector('#new-board').addEventListener('click', dom.createBoard)
         });
     },
+
     showBoards: function (boards) {
         // shows boards appending them to #boards div
         // it adds necessary event listeners also
@@ -97,6 +100,46 @@ export let dom = {
             })
         }
 
+    },
+    newBoard: function(boardTitle){
+        let boardList= "";
+        boardList = `
+        <div class="board-container">
+            <section class="board">
+                <div class="board-header">
+                            <span class="board-title">${boardTitle}
+                            </span>
+                    <button class="board-add">Add Card</button>
+                    <button class="board-toggle"><i class="fas fa-chevron-down"></i></button>
+                </div>
+                <div class="board-columns">
+                    <div class="board-column">
+                        <div class="board-column-title">New</div>
+                        <div class="board-column-content new"></div>
+                    </div>
+                    <div class="board-column">
+                        <div class="board-column-title">In progress</div>
+                        <div class="board-column-content in_progress"></div>
+                    </div>
+                    <div class="board-column">
+                        <div class="board-column-title">Testing</div>
+                        <div class="board-column-content testing"></div>
+                    </div>
+                    <div class="board-column">
+                        <div class="board-column-title">Done</div>
+                        <div class="board-column-content done"></div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        `
+        let boardsContainer = document.querySelector('#boards');
+        boardsContainer.insertAdjacentHTML("beforeend", boardList);
+    },
+    createBoard: function(){
+        let boardTitle = prompt('New board name:')
+        dataHandler.createNewBoard(boardTitle, dom.newBoard(boardTitle))
     }
+
     // here comes more features
 };

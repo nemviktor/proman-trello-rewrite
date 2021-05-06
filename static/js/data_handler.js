@@ -19,6 +19,21 @@ export let dataHandler = {
     _api_post: function (url, data, callback) {
         // it is not called from outside
         // sends the data to the API, and calls callback function
+
+        fetch(url, {
+          method: 'POST', // or 'PUT'
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        })
+        // .then(response => response.json())
+        // .then(data => {
+        //   console.log('Success:', data);
+        // })
+        // .catch((error) => {
+        //   console.error('Error:', error);
+        // });
     },
     init: function () {
         let createBoardButton = document.querySelector('#new-board');
@@ -33,6 +48,7 @@ export let dataHandler = {
         // Here we use an arrow function to keep the value of 'this' on dataHandler.
         //    if we would use function(){...} here, the value of 'this' would change.
         this._api_get('/get-boards', (response) => {
+            console.log(response);
             this._data['boards'] = response;
             callback(response);
         });
@@ -58,14 +74,15 @@ export let dataHandler = {
     },
     createNewBoard: function (boardTitle, callback) {
         // creates new board, saves it and calls the callback function with its data
-
+        let data = {'boadTitle': boardTitle}
+        this._api_post(`./create_new_board`, data,response => callback(response))
     },
     createNewCard: function (cardTitle, boardId, statusId, callback) {
         // creates new card, saves it and calls the callback function with its data
     },
     renameBoard: function() {
         let boards = document.querySelectorAll('.board-title');
-        console.log(boards)
+        // console.log(boards)
         for (let board of boards){
             board.addEventListener('click', (event) => {
                 let new_name = prompt('New name:');
