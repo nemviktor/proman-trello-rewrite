@@ -102,10 +102,11 @@ export let dom = {
 
     },
     newBoard: function(boardTitle){
+        let lastChild = document.querySelector(".board-container");
+        let id = lastChild.children.length + 1
         let boardList= "";
         boardList = `
-        <div class="board-container">
-            <section class="board">
+           
                 <div class="board-header">
                             <span class="board-title">${boardTitle}
                             </span>
@@ -131,10 +132,14 @@ export let dom = {
                     </div>
                 </div>
             </section>
-        </div>
         `
-        let boardsContainer = document.querySelector('#boards');
-        boardsContainer.insertAdjacentHTML("beforeend", boardList);
+         const outerHtml = `
+             <section class="board" id=${id}>
+                ${boardList}
+            </section>
+        `;
+        let boardsContainer = document.querySelector('.board-container');
+        boardsContainer.insertAdjacentHTML("beforeend", outerHtml);
     },
     createBoard: function(){
         let boardTitle = prompt('New board name:')
