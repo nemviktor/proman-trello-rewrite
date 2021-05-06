@@ -92,11 +92,13 @@ export let dom = {
 
     },
     toggleBoard: function(){
-        let board_toggles = document.querySelectorAll('.button-toggle');
+        let board_toggles = document.querySelectorAll('.board-toggle');
         for (let board_toggle of board_toggles) {
             board_toggle.addEventListener('click', function(event) {
-                event.target.parentElement.nextElementSibling;
-                console.log(event.target.parentElement.nextElementSibling);
+                let boardSection = event.target.parentNode.parentNode
+                boardSection.children[1].classList.toggle('hide');
+                // event.target.parentElement.nextElementSibling;
+                // console.log(event.target.parentElement.nextElementSibling);
             })
         }
 
