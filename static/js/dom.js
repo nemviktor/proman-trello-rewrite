@@ -95,7 +95,7 @@ export let dom = {
         let board_toggles = document.querySelectorAll('.board-toggle');
         for (let board_toggle of board_toggles) {
             board_toggle.addEventListener('click', function(event) {
-                let boardSection = event.target.parentNode.parentNode
+                let boardSection = board_toggle.parentNode.parentNode
                 boardSection.children[1].classList.toggle('hide');
                 // event.target.parentElement.nextElementSibling;
                 // console.log(event.target.parentElement.nextElementSibling);
