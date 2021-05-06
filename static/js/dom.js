@@ -101,9 +101,8 @@ export let dom = {
         }
 
     },
-    newBoard: function(boardTitle){
-        let lastChild = document.querySelector(".board-container");
-        let id = lastChild.children.length + 1
+    newBoard: function(boardTitle, id){
+
         let boardList= "";
         boardList = `
            
@@ -143,7 +142,11 @@ export let dom = {
     },
     createBoard: function(){
         let boardTitle = prompt('New board name:')
-        dataHandler.createNewBoard(boardTitle, dom.newBoard(boardTitle))
+        let lastChild = document.querySelector(".board-container");
+        let id = lastChild.children.length + 1
+        let data = {'id': id, 'title': boardTitle}
+        console.log(id)
+        dataHandler.createNewBoard(data, dom.newBoard(boardTitle, id))
     }
 
     // here comes more features

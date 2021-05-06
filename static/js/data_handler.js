@@ -72,9 +72,8 @@ export let dataHandler = {
     getCard: function (cardId, callback) {
         // the card is retrieved and then the callback function is called with the card
     },
-    createNewBoard: function (boardTitle, callback) {
+    createNewBoard: function (data, callback) {
         // creates new board, saves it and calls the callback function with its data
-        let data = {'boadTitle': boardTitle}
         this._api_post(`./create_new_board`, data,response => callback(response))
     },
     createNewCard: function (cardTitle, boardId, statusId, callback) {
