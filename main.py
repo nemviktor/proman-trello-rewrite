@@ -37,7 +37,9 @@ def get_cards_for_board(board_id: int):
 @json_response
 def create_new_board():
     boardTitle = request.get_json()
-    print(boardTitle)
+    boards = data_handler.get_boards()
+    boards.append(boardTitle)
+    data_handler.write_data_to_csv(boards)
 
 
 

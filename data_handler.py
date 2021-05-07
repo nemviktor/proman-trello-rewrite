@@ -30,5 +30,8 @@ def get_cards_for_board(board_id):
     return matching_cards
 
 
-def print(data):
-    print(data)
+def write_data_to_csv(datas):
+    fieldnames= datas[0].keys()
+    # fieldnames = ["id", "title"]
+    persistence._write_csv("data/boards.csv", fieldnames, datas)
+

@@ -21,6 +21,14 @@ def _read_csv(file_name):
         return formatted_data
 
 
+def _write_csv(file_name, fieldname, datas):
+    with open(file_name, 'w') as boards:
+        writer = csv.DictWriter(boards, fieldnames=fieldname)
+        writer.writeheader()
+        for data in datas:
+            writer.writerow(data)
+
+
 def _get_data(data_type, file, force):
     """
     Reads defined type of data from file or cache
