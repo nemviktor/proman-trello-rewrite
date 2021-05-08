@@ -35,3 +35,17 @@ def write_data_to_csv(datas):
     # fieldnames = ["id", "title"]
     persistence._write_csv("data/boards.csv", fieldnames, datas)
 
+
+def rename_board(data):
+    board_name = data['title']
+    id = data['id']
+    boards = get_boards()
+    for board in boards:
+        if board['id'] == id:
+            new_board = {}
+            new_board['id'] = id
+            new_board['title'] = board_name
+            index = boards.index(board)
+            boards.pop(index)
+            boards.insert(index, new_board)
+    write_data_to_csv(boards)

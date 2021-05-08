@@ -41,7 +41,14 @@ def create_new_board():
     boards.append(boardTitle)
     data_handler.write_data_to_csv(boards)
 
-
+@app.route('/rename', methods=['POST', 'GET'])
+# @app.route("/rename/<int:id>", methods=['POST', 'GET'])
+@json_response
+def rename():
+    data = request.get_json()
+    print(data)
+    data_handler.rename_board(data)
+    return data_handler.get_boards()
 
 def main():
     app.run(debug=True)

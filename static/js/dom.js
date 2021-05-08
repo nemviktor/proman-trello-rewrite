@@ -11,7 +11,7 @@ export let dom = {
         dataHandler.getBoards(function(boards){
         dom.showBoards(boards);
         //Rename boards
-        dataHandler.renameBoard();
+        dom.renameBoard();
         dom.toggleBoard();
         document.querySelector('#new-board').addEventListener('click', dom.createBoard)
         });
@@ -27,7 +27,7 @@ export let dom = {
             boardList += `
                 <section class="board" id="${board.id}">
                     <div class="board-header">
-                        <span class="board-title" contenteditable="true">${board.title}
+                        <span class="board-title" id="${board.title}" >${board.title}
                         </span> 
                         <button class="board-add">Add Card</button>
                         <button class="board-toggle"><i class="fas fa-chevron-down"></i></button>
@@ -109,7 +109,7 @@ export let dom = {
         boardList = `
            
                 <div class="board-header">
-                            <span class="board-title" contenteditable="true">${boardTitle}
+                            <span class="board-title" id="${boardTitle}">${boardTitle}
                             </span>
                     <button class="board-add">Add Card</button>
                     <button class="board-toggle"><i class="fas fa-chevron-down"></i></button>
@@ -149,6 +149,44 @@ export let dom = {
         let data = {'id': id, 'title': boardTitle}
         console.log(id)
         dataHandler.createNewBoard(data, dom.newBoard(boardTitle, id))
+    },
+    renameBoard: function(){
+        let boards = document.querySelectorAll('.board-title');
+        // console.log(boards)
+        let id
+        for (let board of boards){
+            board.addEventListener('click', (event) => {
+                let span = event.target.id
+                console.log(span)
+                let boardHeader = event.target.parentNode
+                id = boardHeader.parentNode.id
+                console.log(id);
+                event.target.remove();
+                let input =`
+                    <div class="rename-input">
+                       <input type="text" name="board-title">
+                       <button class="save-button">Save</button>
+                    </div>
+                `
+              boardHeader.insertAdjacentHTML("afterbegin", input)
+               console.log(boardHeader)
+            let saveButton = document.querySelector('.save-button')
+            saveButton.addEventListener('click', function(){
+                let inputField = document.querySelector('.rename-input')
+                let newTitle = inputField.children[0].value
+                let newSpan = `
+                        <span class="board-title" id="${newTitle}">${newTitle}</span> 
+                        `;
+                inputField.remove();
+                boardHeader.insertAdjacentHTML("afterbegin", newSpan)
+                let data = {'title': newTitle, 'id': id}
+                dataHandler._api_post('/rename', data, (response)=>{
+                    console.log(response)
+                 })
+                })
+
+            })
+        }
     }
 
     // here comes more features

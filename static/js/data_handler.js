@@ -48,7 +48,6 @@ export let dataHandler = {
         // Here we use an arrow function to keep the value of 'this' on dataHandler.
         //    if we would use function(){...} here, the value of 'this' would change.
         this._api_get('/get-boards', (response) => {
-            console.log(response);
             this._data['boards'] = response;
             callback(response);
         });
@@ -79,18 +78,8 @@ export let dataHandler = {
     createNewCard: function (cardTitle, boardId, statusId, callback) {
         // creates new card, saves it and calls the callback function with its data
     },
-    renameBoard: function() {
-        let boards = document.querySelectorAll('.board-title');
-        // console.log(boards)
-        for (let board of boards){
-            board.addEventListener('click', (event) => {
-                let new_name = prompt('New name:');
-                event.target.innerHTML = new_name;
-               console.log(event.target);
-
-            })
-        }
-
+    renameBoard: function(id, callback) {
+        // this._api_get(`./rename/${id}`, response => callback(response))
     }
 
 
