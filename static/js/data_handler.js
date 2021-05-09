@@ -27,20 +27,20 @@ export let dataHandler = {
           },
           body: JSON.stringify(data),
         })
-        // .then(response => response.json())
-        // .then(data => {
-        //   console.log('Success:', data);
-        // })
-        // .catch((error) => {
-        //   console.error('Error:', error);
-        // });
+        .then(response => response.json())
+        .then(data => {
+          console.log('Success:', data);
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
     },
     init: function () {
-        let createBoardButton = document.querySelector('#new-board');
-        createBoardButton.addEventListener('click', function() {
-            let boardTitle = prompt('Give me a new board title');
+        // let createBoardButton = document.querySelector('#new-board');
+        // createBoardButton.addEventListener('click', function() {
+        //     let boardTitle = prompt('Give me a new board title');
 
-        })
+        // })
     },
     getBoards: function (callback) {
         // the boards are retrieved and then the callback function is called with the boards
@@ -55,11 +55,21 @@ export let dataHandler = {
     getBoard: function (boardId, callback) {
         // the board is retrieved and then the callback function is called with the board
     },
-    getStatuses: function (callback) {
+    getStatuses: function (boardId , callback) {
+        console.log(`data_handler ${boardId}`)
         // the statuses are retrieved and then the callback function is called with the statuses
+        this._api_get(`/get-statuses/${boardId}`, (response) => {
+            this._data = response;
+            callback(response);
+        });
     },
     getStatus: function (statusId, callback) {
         // the status is retrieved and then the callback function is called with the status
+    },
+    getCardsByStatusId: function (callback) {
+        this._api_get("/get-cards", (response) => {
+            callback(response);
+        });
     },
     getCardsByBoardId: function (boardId, callback) {
         // the cards are retrieved and then the callback function is called with the cards

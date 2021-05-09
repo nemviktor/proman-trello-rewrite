@@ -1,193 +1,96 @@
-// It uses data_handler.js to visualize elements
-import { dataHandler } from "./data_handler.js";
+import {dataHandler} from "./data_handler.js";
 
 export let dom = {
-    // newBoardButton : document.querySelector('#new-board'),
     init: function () {
-        // This function should run once, when the page is loaded.
     },
     loadBoards: function () {
-        // retrieves boards and makes showBoards called
-        dataHandler.getBoards(function(boards){
-        dom.showBoards(boards);
-        //Rename boards
-        dom.renameBoard();
-        dom.toggleBoard();
-        document.querySelector('#new-board').addEventListener('click', dom.createBoard)
+        dataHandler.getBoards(function (boards) {
+            dom.showBoards(boards, dom.loadStatuses);
         });
     },
-
-    showBoards: function (boards) {
-        // shows boards appending them to #boards div
-        // it adds necessary event listeners also
-
-        let boardList = '';
-
-        for(let board of boards){
-            boardList += `
-                <section class="board" id="${board.id}">
-                    <div class="board-header">
-                        <span class="board-title" id="${board.title}" >${board.title}
-                        </span> 
-                        <button class="board-add">Add Card</button>
-                        <button class="board-toggle"><i class="fas fa-chevron-down"></i></button>
-                    </div>
-                    <div class="board-columns">
-                        <div class="board-column">
-                             <div class="board-column-title">New</div>
-                             <div class="board-column-content new"></div>
-                         </div>
-                         <div class="board-column">
-                             <div class="board-column-title">In progress</div>
-                             <div class="board-column-content in_progress"></div>
-                         </div>
-                         <div class="board-column">
-                             <div class="board-column-title">Testing</div>
-                             <div class="board-column-content testing"></div>
-                         </div>
-                         <div class="board-column">
-                             <div class="board-column-title">Done</div>
-                             <div class="board-column-content done"></div>
-                         </div>                
-                    </div>
-                </section>
-            `;
-            this.loadCards(board.id);
+    showBoards: function (boards, callback) {
+        let id = ""
+        for (let board of boards) {
+            id = board.id
+            dom.createBoard(board)
+            callback(id);
         }
-
-        const outerHtml = `
-            <div class="board-container">
-                ${boardList}
-            </div>
-        `;
-
-        let boardsContainer = document.querySelector('#boards');
-        boardsContainer.insertAdjacentHTML("beforeend", outerHtml);
+        dom.toggleButton();
     },
-    loadCards: function (boardId) {
-        // retrieves cards and makes showCards called
-        dataHandler.getCardsByBoardId(boardId, function(cards) {
-            dom.showCards(cards, boardId);
-            })
-    },
-    showCards: function (cards, boardId) {
-        // shows the cards of a board
-        // it adds necessary event listeners also
-        let cardList = '';
-
-        for(let card of cards) {
-            cardList = `<div class="card">
-                            <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
-                            <div class="card-title">${card.title}</div>
-                         </div>`
-
-            let statuses = ['new', 'in_progress', 'testing', 'done'];
-            for (let status_ of statuses) {
-                let cardContainer = document.querySelectorAll(`.board-column-content.${status_}`);
-                if (card.board_id === boardId && card.status_id === status_ ) {
-                    cardContainer[(card.board_id)-1].insertAdjacentHTML("beforeend", cardList);
-                }
-            }
-        }
-
-    },
-    toggleBoard: function(){
-        let board_toggles = document.querySelectorAll('.board-toggle');
-        for (let board_toggle of board_toggles) {
-            board_toggle.addEventListener('click', function(event) {
-                let boardSection = board_toggle.parentNode.parentNode
-                boardSection.children[1].classList.toggle('hide');
-                // event.target.parentElement.nextElementSibling;
-                // console.log(event.target.parentElement.nextElementSibling);
-            })
-        }
-
-    },
-    newBoard: function(boardTitle, id){
-
-        let boardList= "";
-        boardList = `
-           
-                <div class="board-header">
-                            <span class="board-title" id="${boardTitle}">${boardTitle}
-                            </span>
-                    <button class="board-add">Add Card</button>
-                    <button class="board-toggle"><i class="fas fa-chevron-down"></i></button>
-                </div>
-                <div class="board-columns">
-                    <div class="board-column">
-                        <div class="board-column-title">New</div>
-                        <div class="board-column-content new"></div>
-                    </div>
-                    <div class="board-column">
-                        <div class="board-column-title">In progress</div>
-                        <div class="board-column-content in_progress"></div>
-                    </div>
-                    <div class="board-column">
-                        <div class="board-column-title">Testing</div>
-                        <div class="board-column-content testing"></div>
-                    </div>
-                    <div class="board-column">
-                        <div class="board-column-title">Done</div>
-                        <div class="board-column-content done"></div>
-                    </div>
-                </div>
-            </section>
-        `
+    createBoard(board){
          const outerHtml = `
-             <section class="board" id=${id}>
-                ${boardList}
-            </section>
-        `;
+            <section class="board">
+                <div class="board-header" id="${board.id}"><span class="board-title" id="title${board.id}">${board.title}</span>
+                    <button class="board-add" data-board-id="${board.id}">Add Card</button>
+                    <button class="board-toggle" id="${board.id}"><i class="fas fa-chevron-down"></i></button>
+            </div>
+            <div class="board-columns"  data-id="${board.id}"</div>
+            </section>`;
         let boardsContainer = document.querySelector('.board-container');
         boardsContainer.insertAdjacentHTML("beforeend", outerHtml);
     },
-    createBoard: function(){
-        let boardTitle = prompt('New board name:')
-        let lastChild = document.querySelector(".board-container");
-        let id = lastChild.children.length + 1
-        let data = {'id': id, 'title': boardTitle}
-        console.log(id)
-        dataHandler.createNewBoard(data, dom.newBoard(boardTitle, id))
+    loadStatuses: function (boardId) {
+        dataHandler.getStatuses(boardId,function (statuses) {
+            dom.showStatuses(statuses, boardId, dom.loadCards);
+        });
     },
-    renameBoard: function(){
-        let boards = document.querySelectorAll('.board-title');
-        // console.log(boards)
-        let id
-        for (let board of boards){
-            board.addEventListener('click', (event) => {
-                let span = event.target.id
-                console.log(span)
-                let boardHeader = event.target.parentNode
-                id = boardHeader.parentNode.id
-                console.log(id);
-                event.target.remove();
-                let input =`
-                    <div class="rename-input">
-                       <input type="text" name="board-title">
-                       <button class="save-button">Save</button>
-                    </div>
-                `
-              boardHeader.insertAdjacentHTML("afterbegin", input)
-               console.log(boardHeader)
-            let saveButton = document.querySelector('.save-button')
-            saveButton.addEventListener('click', function(){
-                let inputField = document.querySelector('.rename-input')
-                let newTitle = inputField.children[0].value
-                let newSpan = `
-                        <span class="board-title" id="${newTitle}">${newTitle}</span> 
-                        `;
-                inputField.remove();
-                boardHeader.insertAdjacentHTML("afterbegin", newSpan)
-                let data = {'title': newTitle, 'id': id}
-                dataHandler._api_post('/rename', data, (response)=>{
-                    console.log(response)
-                 })
-                })
+    showStatuses: function (statuses,boardId, callback) {
+        for (let status of statuses) {
+           dom.createStatus(status, boardId);
+        }
+        callback(boardId);
+    },
+    createStatus(status, boardId){
+         const outerHtml = `
+            <div class="board-column">
+                <div class="board-column-title" id="status-${status.id}">${status.title}</div>
+                <div class="board-column-content" data-status-id="${status.id}" data-status="${status.title}" boardId = ${boardId}  id="${status.id}">
+            </div>
+             `;
+            let statusContainerBoard = document.querySelector("[data-id=" + CSS.escape(status.board_id) + "]");
+            if (statusContainerBoard !== null) {
+                statusContainerBoard.insertAdjacentHTML("beforeend", outerHtml);
+            }
+    },
+    loadCards: function (boardId) {
+        dataHandler.getCardsByBoardId(boardId,function (cards) {
+            dom.showCards(cards)
+        })
+    },
+    showCards: function (cards, callback) {
+        for (let card of cards) {
+            dom.createCard(card);
+        }
+    },
+    createCard(card){
+        const outerHtml = `
+                <div class="card" id="${card.id}" data_status=${card.status_id}>
+                    <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
+                    <div class="card-title" id="card-${card.id}">${card.title}</div>
+               </div>`;
+            let cardContainers = document.querySelectorAll('.board-column-content');
+            for(let statusColumn of cardContainers){
+                console.log('statusAttributeforContainer',statusColumn.getAttribute('data-status-id'))
+                console.log('CardStatus',card.status_id)
+                console.log('statusColumn boardId',  statusColumn.getAttribute('boardId'))
+                console.log('card-board_id', card.board_id)
+                if (statusColumn.getAttribute('data-status-id') == card.status_id &&
+                     statusColumn.getAttribute('boardId') == card.board_id) {
+                    statusColumn.insertAdjacentHTML("beforeend", outerHtml);
+                }
+            }
+            // let cardContainer = document.querySelector("[data-status-id=" + CSS.escape(card.status_id) + "]");
+    },
+    toggleButton: function () {
+        let boards = document.querySelectorAll(".board-toggle");
+        for (let board of boards) {
+            board.addEventListener('click', function (event) {
+                let boardSection = board.parentNode.parentNode
+                boardSection.children[1].classList.toggle('hide');
 
             })
         }
+
     }
 
-    // here comes more features
 };

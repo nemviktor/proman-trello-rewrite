@@ -14,41 +14,68 @@ def index():
     return render_template('index.html')
 
 
+
 @app.route("/get-boards")
 @json_response
 def get_boards():
-    """
-    All the boards
-    """
-    return data_handler.get_boards()
+    return data_handler.get_data_on_boards('boards')
 
 
+# @app.route("/get-cards/<int:board_id>")
+# @json_response
+# def get_cards_for_board(board_id: int):
+#     """
+#     All cards that belongs to a board
+#     :param board_id: id of the parent board
+#     """
+#     return data_handler.get_cards_for_board(board_id)
 @app.route("/get-cards/<int:board_id>")
 @json_response
-def get_cards_for_board(board_id: int):
-    """
-    All cards that belongs to a board
-    :param board_id: id of the parent board
-    """
-    return data_handler.get_cards_for_board(board_id)
+def get_all_cards(board_id):
+    return data_handler.get_data_from_table('cards', board_id)
 
 
-@app.route("/create_new_board", methods=['POST', 'GET'])
+@app.route("/get-statuses/<int:board_id>")
 @json_response
-def create_new_board():
-    boardTitle = request.get_json()
-    boards = data_handler.get_boards()
-    boards.append(boardTitle)
-    data_handler.write_data_to_csv(boards)
+def get_statuses(board_id):
+    result = data_handler.get_data_from_table('statuses', board_id)
+    return result
 
-@app.route('/rename', methods=['POST', 'GET'])
-# @app.route("/rename/<int:id>", methods=['POST', 'GET'])
-@json_response
-def rename():
-    data = request.get_json()
-    print(data)
-    data_handler.rename_board(data)
-    return data_handler.get_boards()
+# @app.route("/get-boards")
+# @json_response
+# def get_boards():
+#     """
+#     All the boards
+#     """
+#     return data_handler.get_boards()
+#
+#
+# @app.route("/get-cards/<int:board_id>")
+# @json_response
+# def get_cards_for_board(board_id: int):
+#     """
+#     All cards that belongs to a board
+#     :param board_id: id of the parent board
+#     """
+#     return data_handler.get_cards_for_board(board_id)
+#
+#
+# @app.route("/create_new_board", methods=['POST', 'GET'])
+# @json_response
+# def create_new_board():
+#     boardTitle = request.get_json()
+#     boards = data_handler.get_boards()
+#     boards.append(boardTitle)
+#     data_handler.write_data_to_csv(boards)
+#
+# @app.route('/rename', methods=['POST', 'GET'])
+# # @app.route("/rename/<int:id>", methods=['POST', 'GET'])
+# @json_response
+# def rename():
+#     data = request.get_json()
+#     print(data)
+#     data_handler.rename_board(data)
+#     return data_handler.get_boards()
 
 def main():
     app.run(debug=True)
