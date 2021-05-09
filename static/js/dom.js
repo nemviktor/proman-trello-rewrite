@@ -17,7 +17,7 @@ export let dom = {
         }
         dom.toggleButton();
     },
-    createBoard(board){
+    createBoard: function (board){
          const outerHtml = `
             <section class="board">
                 <div class="board-header" id="${board.id}">
@@ -30,6 +30,27 @@ export let dom = {
             </section>`;
         let boardsContainer = document.querySelector('.board-container');
         boardsContainer.insertAdjacentHTML("beforeend", outerHtml);
+
+        //Putting event listener to the brand new board title
+        let title_to_enable_rename = document.querySelector(`#title${board.id}`);
+        let neigbour_element = title_to_enable_rename.parentNode.children[1];
+        //------
+        title_to_enable_rename.addEventListener('click', (event)=>{
+            title_to_enable_rename.innerHTML = "";
+            let new_form = document.createElement('form');
+            new_form.setAttribute('method', 'POST');
+            new_form.setAttribute('action', `/rename/${board.id}`);
+            title_to_enable_rename.parentNode.insertBefore(new_form, neigbour_element);
+            let new_input = document.createElement('input');
+            new_input.setAttribute('name','new-name');
+            new_form.appendChild(new_input);
+            let save_button = document.createElement('button');
+            save_button.setAttribute('type', 'submit');
+            save_button.innerHTML = 'SAVE';
+            save_button.classList.add('board-add');
+            new_form.appendChild(save_button);
+            dataHandler.renameBoard(board.id, dom.loadBoards)
+        });
     },
     loadStatuses: function (boardId) {
         dataHandler.getStatuses(boardId,function (boardId, statuses) {
@@ -85,10 +106,7 @@ export let dom = {
             board.addEventListener('click', function (event) {
                 let boardSection = board.parentNode.parentNode
                 boardSection.children[1].classList.toggle('hide');
-
             })
         }
-
     }
-
 };

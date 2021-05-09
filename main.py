@@ -39,8 +39,19 @@ def get_all_cards(board_id):
 @json_response
 def get_statuses():
     result = data_handler.get_statuses_from_table('statuses')
-    print(result)
     return result
+
+
+# @app.route('/rename', methods=['POST', 'GET'])
+@app.route("/rename/<int:boardid>", methods=['POST', 'GET'])
+@json_response
+def rename(boardid):
+    # data = request.get_json()
+
+    if request.method == 'POST':
+        new_name = request.form['new-name']
+    return data_handler.rename_board(boardid, new_name)
+
 
 # @app.route("/get-boards")
 # @json_response
@@ -68,15 +79,7 @@ def get_statuses():
 #     boards = data_handler.get_boards()
 #     boards.append(boardTitle)
 #     data_handler.write_data_to_csv(boards)
-#
-# @app.route('/rename', methods=['POST', 'GET'])
-# # @app.route("/rename/<int:id>", methods=['POST', 'GET'])
-# @json_response
-# def rename():
-#     data = request.get_json()
-#     print(data)
-#     data_handler.rename_board(data)
-#     return data_handler.get_boards()
+
 
 def main():
     app.run(debug=True)

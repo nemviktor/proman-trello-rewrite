@@ -43,6 +43,18 @@ def get_cards_by_status_id(cursor: RealDictCursor, status_id) -> list:
     cursor.execute(query)
     return cursor.fetchall()
 
+
+@data_conection.connection_handler
+def rename_board(cursor: RealDictCursor, boardid, new_name):
+    query = f"""
+            UPDATE boards
+            SET title = '{new_name}'
+            WHERE id = {boardid}
+            returning id;"""
+    cursor.execute(query)
+    return dict(cursor.fetchone())
+
+
 # def get_card_status(status_id):
 #     """
 #     Find the first status matching the given id
@@ -76,18 +88,6 @@ def get_cards_by_status_id(cursor: RealDictCursor, status_id) -> list:
 #     fieldnames= datas[0].keys()
 #     # fieldnames = ["id", "title"]
 #     persistence._write_csv("data/boards.csv", fieldnames, datas)
-#
-#
-# def rename_board(data):
-#     board_name = data['title']
-#     id = data['id']
-#     boards = get_boards()
-#     for board in boards:
-#         if board['id'] == id:
-#             new_board = {}
-#             new_board['id'] = id
-#             new_board['title'] = board_name
-#             index = boards.index(board)
-#             boards.pop(index)
-#             boards.insert(index, new_board)
-#     write_data_to_csv(boards)
+
+
+
