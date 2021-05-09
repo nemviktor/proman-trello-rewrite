@@ -4,12 +4,22 @@ from psycopg2.extras import RealDictCursor
 
 
 @data_conection.connection_handler
-def get_data_from_table(cursor: RealDictCursor, table, board_id) -> list:
+def get_statuses_from_table(cursor: RealDictCursor, table) -> list:
+    query = '''
+    SELECT {0}.id, {0}.title
+    FROM {0}
+    ORDER BY id;'''.format(table)
+    cursor.execute(query)
+    return cursor.fetchall()
+
+
+@data_conection.connection_handler
+def get_data_on_cards(cursor: RealDictCursor, table, boardid) -> list:
     query = '''
     SELECT *
-    FROM {0}
-    WHERE board_id = {1}
-    ORDER BY id'''.format(table, board_id)
+    FROM {}
+    WHERE board_id = {}
+    ORDER BY id;'''.format(table, boardid)
     cursor.execute(query)
     return cursor.fetchall()
 

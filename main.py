@@ -32,13 +32,14 @@ def get_boards():
 @app.route("/get-cards/<int:board_id>")
 @json_response
 def get_all_cards(board_id):
-    return data_handler.get_data_from_table('cards', board_id)
+    return data_handler.get_data_on_cards('cards', board_id)
 
 
-@app.route("/get-statuses/<int:board_id>")
+@app.route("/get-statuses")
 @json_response
-def get_statuses(board_id):
-    result = data_handler.get_data_from_table('statuses', board_id)
+def get_statuses():
+    result = data_handler.get_statuses_from_table('statuses')
+    print(result)
     return result
 
 # @app.route("/get-boards")

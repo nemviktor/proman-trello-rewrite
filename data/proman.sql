@@ -24,14 +24,18 @@ CREATE TABLE cards (
     "order" serial NOT NULL
 );
 
-ALTER TABLE cards
-    ADD CONSTRAINT fk_card_board_id FOREIGN KEY (board_id) REFERENCES boards(id) ON DELETE CASCADE;
 
-ALTER TABLE cards
-    ADD CONSTRAINT fk_card_status_id FOREIGN KEY (status_id) REFERENCES statuses(id) ON DELETE CASCADE;
 
-ALTER TABLE statuses
-    ADD CONSTRAINT fk_status_board_id FOREIGN KEY (board_id) REFERENCES boards(id) ON DELETE CASCADE;
+-- ALTER TABLE boards
+--     ADD CONSTRAINT fk_card_board_id FOREIGN KEY (board_id) REFERENCES boards(id) ON DELETE CASCADE;
+--
+-- ALTER TABLE cards
+--     ADD CONSTRAINT fk_card_status_id FOREIGN KEY (status_id) REFERENCES statuses(id) ON DELETE CASCADE;
+--
+-- ALTER TABLE statuses
+--     ADD CONSTRAINT fk_status_board_id FOREIGN KEY (board_id) REFERENCES boards(id) ON DELETE CASCADE;
+
+
 
 
 INSERT INTO boards (title) VALUES ('Board 1'), ('Board 2');

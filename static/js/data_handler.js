@@ -55,12 +55,11 @@ export let dataHandler = {
     getBoard: function (boardId, callback) {
         // the board is retrieved and then the callback function is called with the board
     },
-    getStatuses: function (boardId , callback) {
-        console.log(`data_handler ${boardId}`)
+    getStatuses: function (boardId, callback) {
         // the statuses are retrieved and then the callback function is called with the statuses
-        this._api_get(`/get-statuses/${boardId}`, (response) => {
+        this._api_get(`/get-statuses`, (response) => {
             this._data = response;
-            callback(response);
+            callback(boardId, response);
         });
     },
     getStatus: function (statusId, callback) {
