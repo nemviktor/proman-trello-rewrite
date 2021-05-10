@@ -89,12 +89,21 @@ def create_new_board(cursor: RealDictCursor, boardTitle):
 @data_conection.connection_handler
 def last_id(cursor: RealDictCursor, table, key, value) -> list:
     query = '''
-    SELECT id, {1}
-    FROM {0}
-    WHERE {1} = '{2}'
-    ORDER BY id desc;'''.format(table, key, value)
+            SELECT id, {1}
+            FROM {0}
+            WHERE {1} = '{2}'
+            ORDER BY id desc;'''.format(table, key, value)
     cursor.execute(query)
     return cursor.fetchone()
+
+
+@data_conection.connection_handler
+def add_default_statuses_to_board(cursor: RealDictCursor, board_id) :
+    query = '''
+               INSERT INTO board_statuses (board_id, status_id, status_order)
+               VALUES ({0},1,1),({0},2,2),({0},3,3),({0},4,4);'''.format(board_id)
+    cursor.execute(query)
+    return
 
 # def get_card_status(status_id):
 #     """

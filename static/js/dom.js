@@ -151,5 +151,6 @@ export let dom = {
     },
     displayNewBoard:function(data){
         dom.createBoard(data);
+        dom.loadStatuses(data.id)
     }
 };

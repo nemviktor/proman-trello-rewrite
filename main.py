@@ -95,7 +95,7 @@ def create_new_board():
     boardTitle = request.get_json()
     data_handler.create_new_board(boardTitle)
     data = data_handler.last_id('boards', 'title', boardTitle)
-    print(data)
+    data_handler.add_default_statuses_to_board(data['id'])
     return data
 
 
