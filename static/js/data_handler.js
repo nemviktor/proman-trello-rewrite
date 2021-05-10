@@ -87,10 +87,12 @@ export let dataHandler = {
     createNewCard: function (cardTitle, boardId, statusId, callback) {
         // creates new card, saves it and calls the callback function with its data
     },
-    renameBoard: function(boardid, callback) {
-        this._api_get(`./rename/${boardid}`, (response) => {
-            callback(response);
-        });
+    renameBoard: function(data ,callback) {
+        this._api_post(`./rename`, data,response => callback(response))
+
+        // this._api_get(`./rename/${boardid}`, (response) => {
+        //     callback(response);
+        // });
     },
 
 };

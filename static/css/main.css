@@ -135,5 +135,6 @@ section.board{
 }
 
 form {
+    margin-top: 13px;
     display: inline-block;
 }
