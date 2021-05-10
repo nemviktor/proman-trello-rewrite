@@ -53,15 +53,23 @@ def get_statuses():
 #     return data_handler.rename_board(boardid, new_name)
 
 
-@app.route('/rename', methods=['POST', 'GET'])
+@app.route('/rename_board', methods=['POST', 'GET'])
 # @app.route("/rename/<int:boardid>", methods=['POST', 'GET'])
 @json_response
-def rename():
+def rename_board():
     data = request.get_json()
     print(data)
     response = data_handler.rename_board(data['id'], data['title'])
     return response
 
+@app.route('/rename_status', methods=['POST', 'GET'])
+# @app.route("/rename/<int:boardid>", methods=['POST', 'GET'])
+@json_response
+def rename_status():
+    data = request.get_json()
+    print(data)
+    response = data_handler.rename_status(data['id'], data['title'])
+    return response
 # @app.route("/get-boards")
 # @json_response
 # def get_boards():

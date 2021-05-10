@@ -54,7 +54,15 @@ def rename_board(cursor: RealDictCursor, boardid, new_name):
     cursor.execute(query)
     return dict(cursor.fetchone())
 
-
+@data_conection.connection_handler
+def rename_status(cursor: RealDictCursor, statusid, new_name):
+    query = f"""
+            UPDATE statuses
+            SET title = '{new_name}'
+            WHERE id = {statusid}
+            returning id;"""
+    cursor.execute(query)
+    return dict(cursor.fetchone())
 # def get_card_status(status_id):
 #     """
 #     Find the first status matching the given id

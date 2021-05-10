@@ -22,7 +22,7 @@ export let dom = {
             <section class="board">
                 <div class="board-header" id="${board.id}">
                     <span class="board-title" id="title${board.id}">${board.title}</span>
-                    <form class="hide" id="${board.id}">
+                    <form class="board-form hide" id="${board.id}">
                         <input type="text" class="new-name">
                         <button type="submit" class="save">Save</button>
                     </form>
@@ -37,7 +37,7 @@ export let dom = {
 
         //Putting event listener to the brand new board title
         let title_to_enable_rename = document.querySelector(`#title${board.id}`);
-        let form = title_to_enable_rename.parentNode.children[1];
+        // let form = title_to_enable_rename.parentNode.children[1];
         title_to_enable_rename.addEventListener('click', dom.renameBoard)
     },
     loadStatuses: function (boardId) {
@@ -55,6 +55,9 @@ export let dom = {
          const outerHtml = `
             <div class="board-column">
                 <div class="board-column-title" id="status-${status.id}">${status.title}</div>
+                <form class="hide" id="${status.id}">
+                    <input type="text" class="new-name">
+                </form>
                 <div class="board-column-content" data-status-id="${status.id}" data-status="${status.title}" boardid=${boardId}  id="${status.id}">
             </div>
              `;
@@ -62,6 +65,10 @@ export let dom = {
             if (statusContainerAreas !== null) {
                     statusContainerAreas[boardId-1].insertAdjacentHTML("beforeend", outerHtml);
             }
+            let status_rename = document.querySelector(`#status-${status.id}`);
+            let form = status_rename.children[0];
+
+            status_rename.addEventListener('click', dom.renameStatus)
     },
     loadCards: function (boardId) {
         dataHandler.getCardsByBoardId(boardId,function (cards) {
@@ -112,6 +119,27 @@ export let dom = {
                     'title': inputValue
                 }
                 dataHandler.renameBoard(data)
+            }
+        })
+    },
+    renameStatus: function(event){
+        let statusTitle = event.target
+        let form = statusTitle.parentNode.children[1];
+        console.log(form)
+        statusTitle.classList.add('hide')
+        form.classList.remove('hide')
+        form.addEventListener('keypress', (event)=>{
+            if (event.key === 'Enter'){
+                let inputValue = form.children[0].value
+                console.log(inputValue)
+                console.log(form.id)
+                if (inputValue != ''){
+                    let data = {
+                        'id' : form.id,
+                        'title': inputValue
+                    }
+                    dataHandler.renameStatus(data)
+                }
             }
         })
     }
