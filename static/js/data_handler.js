@@ -93,6 +93,8 @@ export let dataHandler = {
     },
     renameStatus: function(data, callback){
         this._api_post(`./rename_status`, data,response => callback(response))
-
-    }
+    },
+    addNewColumn: function(data,callback) {
+        this._api_post(`/add-new-column`, data, response => callback(response))
+    },
 };

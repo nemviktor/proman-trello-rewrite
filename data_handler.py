@@ -105,6 +105,32 @@ def add_default_statuses_to_board(cursor: RealDictCursor, board_id) :
     cursor.execute(query)
     return
 
+
+@data_conection.connection_handler
+def add_new_column(cursor: RealDictCursor, new_status, place, board):
+    query = """
+            UPDATE statuses
+            SET order_id = order_id +1
+            WHERE order_id >= {};""".format(place)
+    cursor.execute(query)
+    query = """
+            UPDATE board_statuses
+            SET status_order = status_order +1
+            WHERE status_order >= {} AND board_id = {};""".format(place, board)
+    cursor.execute(query)
+    query = """
+            INSERT INTO statuses (title, order_id)
+            VALUES ('{}', {})
+            returning id;""".format(new_status, place)
+    cursor.execute(query)
+    status_id = cursor.fetchone()['id']
+    query = """
+            INSERT INTO board_statuses (board_id, status_id, status_order)
+            VALUES ({}, {}, {});""".format(board, status_id, place)
+    cursor.execute(query)
+    return status_id
+
+
 # def get_card_status(status_id):
 #     """
 #     Find the first status matching the given id

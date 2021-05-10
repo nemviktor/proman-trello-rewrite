@@ -27,6 +27,7 @@ export let dom = {
                         <button type="submit" class="save">Save</button>
                     </form>
                     <button class="board-add" data-board-id="${board.id}">Add Card</button>
+                    <button class="board-status-add" add-status-board-id="${board.id}"><i class="icon-columns"></i></button>
                     <button class="board-toggle" id="${board.id}"><i class="fas fa-chevron-down"></i></button>
                 </div>
                 <div class="board-columns"  data-id="${board.id}">
@@ -37,7 +38,13 @@ export let dom = {
 
         //Putting event listener to the brand new board title
         let title_to_enable_rename = document.querySelector(`#title${board.id}`);
-        title_to_enable_rename.addEventListener('click', dom.renameBoard)
+        title_to_enable_rename.addEventListener('click', dom.renameBoard);
+
+        //Putting event listener to the add-board-column button
+        let add_status_column = document.querySelector(`[add-status-board-id='${board.id}']`);
+        add_status_column.addEventListener('click', ()=> {
+            dom.addNewColumn((board.id));
+        });
     },
     loadStatuses: function (boardId) {
         dataHandler.getStatuses(boardId,function (boardId, statuses) {
@@ -45,6 +52,10 @@ export let dom = {
         });
     },
     showStatuses: function (boardId, statuses, callback) {
+        let statusContainerAreas = document.querySelectorAll('.board-columns');
+        if (statusContainerAreas !== null) {
+            statusContainerAreas[boardId-1].innerHTML = '';
+        }
         for (let status of statuses) {
             dom.createStatus(status, boardId);
         }
@@ -62,10 +73,10 @@ export let dom = {
              `;
             let statusContainerAreas = document.querySelectorAll('.board-columns');
             if (statusContainerAreas !== null) {
-                    statusContainerAreas[boardId-1].insertAdjacentHTML("beforeend", outerHtml);
+                statusContainerAreas[boardId-1].insertAdjacentHTML("beforeend", outerHtml);
             }
             let status_rename = document.querySelector(`#status-${status.id}`);
-            let form = status_rename.children[0];
+            // let form = status_rename.children[0];
 
             status_rename.addEventListener('click', dom.renameStatus);
     },
@@ -152,5 +163,15 @@ export let dom = {
     displayNewBoard:function(data){
         dom.createBoard(data);
         dom.loadStatuses(data.id)
-    }
+    },
+    addNewColumn: function(boardId) {
+      let new_status_name = prompt('Name of new status:');
+      let new_order = prompt('Order of the new status column');
+      let data = {'status': {'order_id': new_order,
+                             'title':new_status_name},
+                  'boardID':boardId};
+      dataHandler.addNewColumn(data, function() {
+          dom.loadStatuses(data.boardID);
+      })
+    },
 };

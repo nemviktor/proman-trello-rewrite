@@ -99,6 +99,15 @@ def create_new_board():
     return data
 
 
+@app.route("/add-new-column", methods=['POST', 'GET'])
+@json_response
+def add_new_column():
+    data = request.get_json()
+    id_response = data_handler.add_new_column(data['status']['title'], data['status']['order_id'], data['boardID'])
+    data['status']['id'] = id_response
+    return data
+
+
 def main():
     app.run(debug=True)
 
