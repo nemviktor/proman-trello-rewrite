@@ -14,7 +14,6 @@ def index():
     return render_template('index.html')
 
 
-
 @app.route("/get-boards")
 @json_response
 def get_boards():
@@ -35,10 +34,10 @@ def get_all_cards(board_id):
     return data_handler.get_data_on_cards('cards', board_id)
 
 
-@app.route("/get-statuses")
+@app.route("/get-statuses/<int:boardid>")
 @json_response
-def get_statuses():
-    result = data_handler.get_statuses_from_table('statuses')
+def get_statuses(boardid):
+    result = data_handler.get_statuses_from_table('statuses', 'board_statuses', boardid)
     return result
 
 
@@ -58,18 +57,19 @@ def get_statuses():
 @json_response
 def rename_board():
     data = request.get_json()
-    print(data)
     response = data_handler.rename_board(data['id'], data['title'])
     return response
+
 
 @app.route('/rename_status', methods=['POST', 'GET'])
 # @app.route("/rename/<int:boardid>", methods=['POST', 'GET'])
 @json_response
 def rename_status():
     data = request.get_json()
-    print(data)
-    response = data_handler.rename_status(data['id'], data['title'])
+    response = data_handler.rename_status(data['id'], data['title'], data['board_id'], data['target_order'])
     return response
+
+
 # @app.route("/get-boards")
 # @json_response
 # def get_boards():
@@ -89,13 +89,12 @@ def rename_status():
 #     return data_handler.get_cards_for_board(board_id)
 #
 #
-# @app.route("/create_new_board", methods=['POST', 'GET'])
-# @json_response
-# def create_new_board():
-#     boardTitle = request.get_json()
-#     boards = data_handler.get_boards()
-#     boards.append(boardTitle)
-#     data_handler.write_data_to_csv(boards)
+@app.route("/create_new_board", methods=['POST', 'GET'])
+@json_response
+def create_new_board():
+    boardTitle = request.get_json()
+    data_handler.create_new_board(boardTitle)
+    return
 
 
 def main():

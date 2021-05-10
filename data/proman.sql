@@ -11,8 +11,8 @@ CREATE TABLE boards (
 DROP TABLE IF EXISTS statuses;
 CREATE TABLE statuses (
     id serial NOT NULL PRIMARY KEY,
-    title text DEFAULT 'Undefined'
-
+    title text DEFAULT 'Undefined',
+    order_id INTEGER NOT NULL
 );
 
 DROP TABLE IF EXISTS cards;
@@ -24,8 +24,33 @@ CREATE TABLE cards (
     "order" serial NOT NULL
 );
 
-
-
+DROP TABLE IF EXISTS board_statuses;
+CREATE TABLE board_statuses (
+  id serial NOT NULL PRIMARY KEY,
+  board_id INTEGER,
+  status_id INTEGER,
+  status_order INTEGER
+);
+-- CREATE TABLE board_statuses(
+--     board_id int not null,
+--     status_id int not null,
+--     PRIMARY KEY ( board_id, status_id )
+-- );
+--
+-- ALTER TABLE boards
+-- ADD CONSTRAINT fk_board_id
+-- FOREIGN KEY(board_id)
+-- REFERENCES board_statuses(board_id)
+-- ON DELETE CASCADE;
+--
+-- ALTER TABLE statuses
+-- ADD CONSTRAINT fk_status_id
+-- FOREIGN KEY(status_id)
+-- REFERENCES board_statuses(status_id)
+-- ON DELETE CASCADE;
+--
+--
+--
 -- ALTER TABLE boards
 --     ADD CONSTRAINT fk_card_board_id FOREIGN KEY (board_id) REFERENCES boards(id) ON DELETE CASCADE;
 --
@@ -36,11 +61,12 @@ CREATE TABLE cards (
 --     ADD CONSTRAINT fk_status_board_id FOREIGN KEY (board_id) REFERENCES boards(id) ON DELETE CASCADE;
 
 
-
+INSERT INTO board_statuses (board_id, status_id, status_order)
+            VALUES (1,1,1),(1,2,2),(1,3,3),(1,4,4),(2,1,1),(2,2,2),(2,3,3),(2,4,4);
 
 INSERT INTO boards (title) VALUES ('Board 1'), ('Board 2');
 
-INSERT INTO statuses (title) VALUES ('new'), ('in progress'),  ('testing') ,('done');
+INSERT INTO statuses (title, order_id) VALUES ('new',1), ('in progress',2),  ('testing',3) ,('done',4);
 
 INSERT INTO cards (board_id, title, status_id, "order") VALUES (1, 'new cad 1', 1, 0),
                          (1, 'new card 2', 1, 1),

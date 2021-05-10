@@ -4,11 +4,13 @@ from psycopg2.extras import RealDictCursor
 
 
 @data_conection.connection_handler
-def get_statuses_from_table(cursor: RealDictCursor, table) -> list:
+def get_statuses_from_table(cursor: RealDictCursor, table1, table2, boardid) -> list:
     query = '''
-    SELECT {0}.id, {0}.title
+    SELECT {0}.id, {0}.title, {0}.order_id
     FROM {0}
-    ORDER BY id;'''.format(table)
+    JOIN {1} ON {0}.id = {1}.status_id
+    WHERE {1}.board_id = {2}
+    ORDER BY order_id;'''.format(table1, table2, boardid)
     cursor.execute(query)
     return cursor.fetchall()
 
@@ -16,8 +18,9 @@ def get_statuses_from_table(cursor: RealDictCursor, table) -> list:
 @data_conection.connection_handler
 def get_data_on_cards(cursor: RealDictCursor, table, boardid) -> list:
     query = '''
-    SELECT *
+    SELECT cards.*, statuses.order_id AS status_order
     FROM {}
+    JOIN statuses ON cards.status_id = statuses.id
     WHERE board_id = {}
     ORDER BY id;'''.format(table, boardid)
     cursor.execute(query)
@@ -54,15 +57,35 @@ def rename_board(cursor: RealDictCursor, boardid, new_name):
     cursor.execute(query)
     return dict(cursor.fetchone())
 
+
 @data_conection.connection_handler
-def rename_status(cursor: RealDictCursor, statusid, new_name):
+def rename_status(cursor: RealDictCursor, statusid, new_name, target_board, target_order):
     query = f"""
-            UPDATE statuses
-            SET title = '{new_name}'
-            WHERE id = {statusid}
-            returning id;"""
+            INSERT INTO statuses (title, order_id)
+            VALUES ('{new_name}', {target_order});"""
     cursor.execute(query)
-    return dict(cursor.fetchone())
+    query = f"""
+            SELECT id
+            FROM statuses
+            WHERE title = '{new_name}';"""
+    cursor.execute(query)
+    new_statusid = cursor.fetchone()['id']
+    query = f"""
+            UPDATE board_statuses
+            SET status_id = '{new_statusid}'
+            WHERE (board_id = {target_board} AND status_order = {target_order});"""
+    cursor.execute(query)
+    return
+
+
+@data_conection.connection_handler
+def create_new_board(cursor: RealDictCursor, boardTitle):
+    query = f"""
+            INSERT INTO boards (title)
+            VALUES ('{boardTitle}');"""
+    cursor.execute(query)
+    return
+
 # def get_card_status(status_id):
 #     """
 #     Find the first status matching the given id

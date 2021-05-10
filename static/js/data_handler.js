@@ -57,7 +57,7 @@ export let dataHandler = {
     },
     getStatuses: function (boardId, callback) {
         // the statuses are retrieved and then the callback function is called with the statuses
-        this._api_get(`/get-statuses`, (response) => {
+        this._api_get(`/get-statuses/${boardId}`, (response) => {
             this._data = response;
             callback(boardId, response);
         });
@@ -94,5 +94,4 @@ export let dataHandler = {
         this._api_post(`./rename_status`, data,response => callback(response))
 
     }
-
 };

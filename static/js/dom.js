@@ -37,7 +37,6 @@ export let dom = {
 
         //Putting event listener to the brand new board title
         let title_to_enable_rename = document.querySelector(`#title${board.id}`);
-        // let form = title_to_enable_rename.parentNode.children[1];
         title_to_enable_rename.addEventListener('click', dom.renameBoard)
     },
     loadStatuses: function (boardId) {
@@ -53,12 +52,12 @@ export let dom = {
     },
     createStatus(status, boardId){
          const outerHtml = `
-            <div class="board-column">
+            <div class="board-column" order="${status.order_id}">
                 <div class="board-column-title" id="status-${status.id}">${status.title}</div>
                 <form class="hide" id="${status.id}">
                     <input type="text" class="new-name">
                 </form>
-                <div class="board-column-content" data-status-id="${status.id}" data-status="${status.title}" boardid=${boardId}  id="${status.id}">
+                <div class="board-column-content" data-status-id="${status.id}" data-status="${status.title}" data-order="${status.order_id}" boardid=${boardId}  id="${status.id}">
             </div>
              `;
             let statusContainerAreas = document.querySelectorAll('.board-columns');
@@ -68,7 +67,7 @@ export let dom = {
             let status_rename = document.querySelector(`#status-${status.id}`);
             let form = status_rename.children[0];
 
-            status_rename.addEventListener('click', dom.renameStatus)
+            status_rename.addEventListener('click', dom.renameStatus);
     },
     loadCards: function (boardId) {
         dataHandler.getCardsByBoardId(boardId,function (cards) {
@@ -88,8 +87,8 @@ export let dom = {
                </div>`;
             let cardContainers = document.querySelectorAll('.board-column-content');
             for(let statusColumn of cardContainers){
-                if (statusColumn.getAttribute('data-status-id') == card.status_id &&
-                     statusColumn.getAttribute('boardId') == card.board_id) {
+                let column_order = statusColumn.parentNode.getAttribute('order');
+                if (column_order == card.status_order && statusColumn.getAttribute('boardId') == card.board_id) {
                     statusColumn.insertAdjacentHTML("beforeend", outerHtml);
                 }
             }
@@ -112,7 +111,6 @@ export let dom = {
         let save = form.children[1]
         save.addEventListener('click', ()=>{
             let inputValue = form.children[0].value
-            console.log(inputValue)
             if (inputValue != ''){
                 let data = {
                     'id' : form.id,
@@ -123,24 +121,32 @@ export let dom = {
         })
     },
     renameStatus: function(event){
-        let statusTitle = event.target
+        let statusTitle = event.target;
         let form = statusTitle.parentNode.children[1];
-        console.log(form)
+        let target_order = parseInt(statusTitle.parentNode.children[2].getAttribute('data-order'));
+        let _board_id = parseInt(statusTitle.parentNode.parentNode.getAttribute('data-id'));
         statusTitle.classList.add('hide')
         form.classList.remove('hide')
         form.addEventListener('keypress', (event)=>{
             if (event.key === 'Enter'){
                 let inputValue = form.children[0].value
-                console.log(inputValue)
-                console.log(form.id)
                 if (inputValue != ''){
                     let data = {
                         'id' : form.id,
+                        'target_order': target_order,
+                        'board_id': _board_id,
                         'title': inputValue
                     }
                     dataHandler.renameStatus(data)
                 }
             }
+        })
+    },
+    create_new_board: function(){
+        let add_new_board_button = document.querySelector('#new-board');
+        add_new_board_button.addEventListener('click', function () {
+            let data = prompt('New Board name:');
+            dataHandler.createNewBoard(data);
         })
     }
 };
