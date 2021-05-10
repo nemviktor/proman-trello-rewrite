@@ -86,6 +86,16 @@ def create_new_board(cursor: RealDictCursor, boardTitle):
     cursor.execute(query)
     return
 
+@data_conection.connection_handler
+def last_id(cursor: RealDictCursor, table, key, value) -> list:
+    query = '''
+    SELECT id, {1}
+    FROM {0}
+    WHERE {1} = '{2}'
+    ORDER BY id desc;'''.format(table, key, value)
+    cursor.execute(query)
+    return cursor.fetchone()
+
 # def get_card_status(status_id):
 #     """
 #     Find the first status matching the given id

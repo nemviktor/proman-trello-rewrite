@@ -94,7 +94,9 @@ def rename_status():
 def create_new_board():
     boardTitle = request.get_json()
     data_handler.create_new_board(boardTitle)
-    return
+    data = data_handler.last_id('boards', 'title', boardTitle)
+    print(data)
+    return data
 
 
 def main():

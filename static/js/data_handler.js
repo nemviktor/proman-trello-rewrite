@@ -30,6 +30,7 @@ export let dataHandler = {
         .then(response => response.json())
         .then(data => {
           console.log('Success:', data);
+          callback(data)
         })
         .catch((error) => {
           console.error('Error:', error);

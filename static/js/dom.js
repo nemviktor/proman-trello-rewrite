@@ -146,7 +146,10 @@ export let dom = {
         let add_new_board_button = document.querySelector('#new-board');
         add_new_board_button.addEventListener('click', function () {
             let data = prompt('New Board name:');
-            dataHandler.createNewBoard(data);
+            dataHandler.createNewBoard(data, dom.displayNewBoard)
         })
+    },
+    displayNewBoard:function(data){
+        dom.createBoard(data);
     }
 };
