@@ -133,13 +133,19 @@ def add_new_column(cursor: RealDictCursor, new_status, place, board):
 
 
 @data_conection.connection_handler
-def delete_data(cursor: RealDictCursor, id:int, table:str) -> list :
-    query = sql.SQL(f'''DELETE FROM {table}
+def delete_data(cursor: RealDictCursor, id, table) :
+    query = (f'''DELETE FROM {table}
                     WHERE id ={id}''')
 
-    print(query.as_string(cursor))
     cursor.execute(query)
 
+
+@data_conection.connection_handler
+def delete_data_from_board_status(cursor: RealDictCursor, id):
+    query =('''DELETE FROM board_statuses
+                    WHERE board_id = {}''').format(id)
+
+    cursor.execute(query)
 # def get_card_status(status_id):
 #     """
 #     Find the first status matching the given id
