@@ -1,0 +1,168 @@
+:root {
+    --border-radius: 3px;
+    --status-1: #9e5b5b;
+    --status-2: #aaa505;
+    --status-3: #296196;
+    --status-4: #118307;
+    --status-5: #790725;
+    --status-6: #70077e;
+}
+
+body{
+    min-width: 620px;
+    background-image: url(https://images.unsplash.com/32/Mc8kW4x9Q3aRR3RkP5Im_IMG_4417.jpg?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80);
+    /* background-image: url(https://images.unsplash.com/photo-1546484396-fb3fc6f95f98?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80);*/
+    font-family: sans-serif;
+    text-align: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+h1, .board-title, .board-column-title{
+    font-weight: 100;
+}
+
+h1{
+    color: aliceblue;
+    text-align: center;
+    font-size: 4em;
+    letter-spacing: 5px;
+    transform: scale(1.2, 1);
+}
+
+button{
+    background: rgb(112, 94, 94);
+    color: #fff;
+    border: none;
+    font-size: 14px;
+    font-family: sans-serif;
+    padding: 4px 10px;
+}
+
+.board-container{
+    max-width: 960px;
+    margin: 0 auto;
+}
+
+section.board{
+    margin: 20px;
+    border: aliceblue;
+    background: #978a8a90;
+    border-radius: 3px;
+}
+
+.board-header{
+    height: 50px;
+    background: rgb(153, 142, 142);
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+}
+
+.board-title{
+    color: aliceblue;
+    margin: 13px;
+    display: inline-block;
+    font-size: 20px;
+}
+.board-title, .board-add, .board-status-add, .board-toggle {
+    display: inline-block;
+}
+
+.board-status-add {
+    float: left;
+    margin: 13px;
+}
+
+.board-toggle{
+    float: right;
+    margin: 13px;
+}
+
+
+.board-columns{
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.board-column{
+    padding: 10px;
+    flex: 1;
+}
+
+.board-column-content{
+    min-height: 49px;
+}
+
+.board-column-content:empty{
+    /*This only works if the tag is really empty and there is not even whitespace inside*/
+    border: 4px solid #cdcdcd;
+    margin-top: 4px;
+    border-radius: 10px;
+    background: #eee;
+    opacity: 0.5;
+}
+
+.board-column-title{
+    text-align: center;
+    color: aliceblue;
+}
+
+.card{
+    position: relative;
+    background: #222;
+    color: #fff;
+    border-radius: var(--border-radius);
+    margin: 4px 0;
+    padding: 4px;
+}
+
+.board-column:nth-of-type(1) .card {
+    background: var(--status-1);
+}
+
+.board-column:nth-of-type(2) .card {
+    background: var(--status-2);
+}
+
+.board-column:nth-of-type(3) .card {
+    background: var(--status-3);
+}
+
+.board-column:nth-of-type(4) .card {
+    background: var(--status-4);
+}
+
+.board-column:nth-of-type(5) .card {
+    background: var(--status-5);
+}
+
+.board-column:nth-of-type(6) .card {
+    background: var(--status-6);
+}
+
+.card-remove{
+    display: block;
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.card-title{
+    padding-right: 16px;
+}
+
+.hide{
+    display: none;
+}
+
+form {
+    display: inline-block;
+}
+
+.board-form{
+    margin-top: 13px;
+}
+
+

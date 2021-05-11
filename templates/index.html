@@ -18,13 +18,20 @@
         <link rel="stylesheet" href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css">
         <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css">
 
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
+        <link id="css-link" rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/dark_design.css') }}">
+{#        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/light_design.css') }}">#}
+
         <script type="module" src="{{ url_for('static', filename='js/main.js') }}" defer></script>
     </head>
     <body>
         <div id="boards">
             <h1>ProMan</h1>
             <button type="button" id="new-board">Create new board</button>
+            <button type="button" id="switch" class="dark">
+                <i class="fas fa-sun"></i>
+                <i class="fas fa-moon hide"></i>
+            </button>
+
             <div class="board-container">
             </div>
         </div>

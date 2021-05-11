@@ -187,5 +187,24 @@ export let dom = {
                  'table' : 'boards'
         }
         dataHandler.deleteBoard(data)
+    },
+    switch: function(){
+        let switchButton = document.querySelector('#switch');
+        switchButton.addEventListener('click', function(){
+        let link = document.querySelector('#css-link')
+        let sun = document.querySelector('.fa-sun');
+        let moon = document.querySelector('.fa-moon');
+            if (switchButton.classList.contains('dark')){
+                sun.classList.add('hide')
+                moon.classList.remove('hide')
+                switchButton.classList.remove('dark')
+                link.href = "static/css/light_design.css"
+                }else{
+                link.href = "static/css/dark_design.css"
+                switchButton.classList.add('dark')
+                sun.classList.remove('hide')
+                moon.classList.add('hide')
+            }
+        })
     }
 };

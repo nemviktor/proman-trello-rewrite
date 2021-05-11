@@ -10,6 +10,7 @@ function init() {
     // loads the boards to the screen
     dom.loadBoards();
     dom.create_new_board();
+    dom.switch();
 }
 
 init();
