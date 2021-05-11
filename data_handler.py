@@ -1,4 +1,5 @@
 import persistence
+from psycopg2 import sql
 import data_conection
 from psycopg2.extras import RealDictCursor
 
@@ -130,6 +131,14 @@ def add_new_column(cursor: RealDictCursor, new_status, place, board):
     cursor.execute(query)
     return status_id
 
+
+@data_conection.connection_handler
+def delete_data(cursor: RealDictCursor, id:int, table:str) -> list :
+    query = sql.SQL(f'''DELETE FROM {table}
+                    WHERE id ={id}''')
+
+    print(query.as_string(cursor))
+    cursor.execute(query)
 
 # def get_card_status(status_id):
 #     """

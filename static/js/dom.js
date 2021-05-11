@@ -19,13 +19,14 @@ export let dom = {
     },
     createBoard: function (board){
          const outerHtml = `
-            <section class="board">
+            <section class="board" id="board-${board.id}">
                 <div class="board-header" id="${board.id}">
                     <span class="board-title" id="title${board.id}">${board.title}</span>
                     <form class="board-form hide" id="${board.id}">
                         <input type="text" class="new-name">
                         <button type="submit" class="save">Save</button>
                     </form>
+                    <button class="board-remove" delete-board-id="${board.id}"><i class="fas fa-trash-alt"></i></button>
                     <button class="board-add" data-board-id="${board.id}">Add Card</button>
                     <button class="board-status-add" add-status-board-id="${board.id}"><i class="icon-columns"></i></button>
                     <button class="board-toggle" id="${board.id}"><i class="fas fa-chevron-down"></i></button>
@@ -45,6 +46,11 @@ export let dom = {
         add_status_column.addEventListener('click', ()=> {
             dom.addNewColumn((board.id));
         });
+        //Putting event listener to the delete-board button
+        let deleteBoardButton = document.querySelector(`[delete-board-id='${board.id}']`);
+        deleteBoardButton.addEventListener('click', () => dom.deleteBoard(board.id))
+
+
     },
     loadStatuses: function (boardId) {
         dataHandler.getStatuses(boardId,function (boardId, statuses) {
@@ -174,4 +180,12 @@ export let dom = {
           dom.loadStatuses(data.boardID);
       })
     },
+    deleteBoard: function(boardId){
+        let boardSection = document.querySelector(`#board-${boardId}`)
+        boardSection.remove()
+        let data = { 'id' : boardId,
+                 'table' : 'boards'
+        }
+        dataHandler.deleteBoard(data)
+    }
 };

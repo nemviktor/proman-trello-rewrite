@@ -97,4 +97,7 @@ export let dataHandler = {
     addNewColumn: function(data,callback) {
         this._api_post(`/add-new-column`, data, response => callback(response))
     },
+    deleteBoard: function(data, callback) {
+        this._api_post(`/delete_data`, data )
+    },
 };

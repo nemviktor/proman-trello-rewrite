@@ -108,6 +108,15 @@ def add_new_column():
     return data
 
 
+@app.route("/delete_data", methods=['POST', 'GET'])
+@json_response
+def delete_data():
+    data = request.get_json()
+    print(data)
+    data_handler.delete_data(data['id'], data['table'])
+    return "delete : 3"
+
+
 def main():
     app.run(debug=True)
 
