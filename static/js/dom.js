@@ -186,7 +186,9 @@ export let dom = {
         let data = { 'id' : boardId,
                  'table' : 'boards'
         }
-        dataHandler.deleteBoard(data)
+        dataHandler.deleteBoard(data, function(data){
+            console.log(data)
+        })
     },
     switch: function(){
         let switchButton = document.querySelector('#switch');
