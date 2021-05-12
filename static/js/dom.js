@@ -92,6 +92,7 @@ export let dom = {
     showCards: function (cards, callback) {
         for (let card of cards) {
             dom.createCard(card);
+            dom.renameCard(card.id, card.title, card.board_id)
         }
         callback()
     },
@@ -99,7 +100,7 @@ export let dom = {
         const outerHtml = `
                 <div class="card" id="${card.id}" data_status=${card.status_id}>
                     <div class="card-remove" id="${card.id}"><i class="fas fa-trash-alt"></i></div>
-                    <div class="card-title" >${card.title}</div>
+                    <div class="card-title" id="${card.id}" >${card.title}</div>
                </div>`;
             let cardContainers = document.querySelectorAll('.board-column-content');
             for(let statusColumn of cardContainers){
@@ -157,6 +158,40 @@ export let dom = {
                 }
             }
         })
+    },
+    renameCard: function(cardId,title, boardId){
+        console.log(cardId,title, boardId)
+        let cardTitles = document.querySelectorAll('.card-title')
+        for (let cardTitle of cardTitles){
+            if(cardTitle.id == cardId){
+                cardTitle.addEventListener('click', function(){
+                    const outerHtml = `
+                        <form class="card-form" id="card-${cardId}">
+                            <input type="text" class="new-name">
+                        </form>`;
+                    cardTitle.insertAdjacentHTML("afterend", outerHtml);
+                    let trash = cardTitle.parentNode.children[0]
+                    cardTitle.classList.add('hide');
+                    trash.classList.add('hide');
+                    let form = document.querySelector(`#card-${cardId}`);
+                    form.addEventListener('keypress', (event)=> {
+                        if (event.key === 'Enter') {
+                            let inputValue = form.children[0].value
+                            if (inputValue != '') {
+                                let data = {
+                                    'id': cardId,
+                                    'board_id': boardId,
+                                    'title': inputValue
+                                }
+                                console.log(data)
+                                dataHandler.renameCard(data, response => console.log(response))
+                            }
+                        }
+                    })
+                })
+            }
+        }
+
     },
     create_new_board: function(){
         let add_new_board_button = document.querySelector('#new-board');

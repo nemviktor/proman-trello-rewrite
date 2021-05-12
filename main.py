@@ -69,7 +69,12 @@ def rename_status():
     response = data_handler.rename_status(data['id'], data['title'], data['board_id'], data['target_order'])
     return response
 
-
+@app.route('/rename_card', methods=['POST', 'GET'])
+@json_response
+def rename_card():
+    card = request.get_json()
+    response = data_handler.rename_card(int(card['id']), card['title'])
+    return response
 # @app.route("/get-boards")
 # @json_response
 # def get_boards():

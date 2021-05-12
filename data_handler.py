@@ -58,6 +58,16 @@ def rename_board(cursor: RealDictCursor, boardid, new_name):
     cursor.execute(query)
     return dict(cursor.fetchone())
 
+@data_conection.connection_handler
+def rename_card(cursor: RealDictCursor, id:int, title:str)->list:
+    query = f'''
+            UPDATE cards
+            SET title = '{title}'
+            WHERE id = {id}
+            returning id;
+            '''
+    cursor.execute(query, {'title': title, 'id': id})
+    return dict(cursor.fetchone())
 
 @data_conection.connection_handler
 def rename_status(cursor: RealDictCursor, statusid, new_name, target_board, target_order):

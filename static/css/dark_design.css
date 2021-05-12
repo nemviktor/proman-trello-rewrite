@@ -164,5 +164,9 @@ form {
 .board-form{
     margin-top: 13px;
 }
+.card-form .new-name {
+    max-width:100px;
+}
+
 
 
