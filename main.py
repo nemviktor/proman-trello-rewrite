@@ -112,6 +112,7 @@ def add_new_column():
 @json_response
 def delete_data():
     data = request.get_json()
+    print(data)
     data_handler.delete_data(int(data['id']), data['table'])
     if data['table'] == 'boards':
         data_handler.delete_data_from_board_status(data['id'])

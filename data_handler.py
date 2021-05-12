@@ -133,11 +133,12 @@ def add_new_column(cursor: RealDictCursor, new_status, place, board):
 
 
 @data_conection.connection_handler
-def delete_data(cursor: RealDictCursor, id, table) :
-    query = (f'''DELETE FROM {table}
-                    WHERE id ={id}''')
+def delete_data(cursor: RealDictCursor, id:int, table: str) -> list :
+    query = sql.SQL('''DELETE FROM {table}
+                    WHERE id =%(id)s;
+                    ''').format(table=sql.Identifier(f'{table}'))
 
-    cursor.execute(query)
+    cursor.execute(query, {'table': table, 'id': id})
 
 
 @data_conection.connection_handler

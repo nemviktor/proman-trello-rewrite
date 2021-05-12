@@ -49,8 +49,6 @@ export let dom = {
         //Putting event listener to the delete-board button
         let deleteBoardButton = document.querySelector(`[delete-board-id='${board.id}']`);
         deleteBoardButton.addEventListener('click', () => dom.deleteBoard(board.id))
-
-
     },
     loadStatuses: function (boardId) {
         dataHandler.getStatuses(boardId,function (boardId, statuses) {
@@ -88,19 +86,20 @@ export let dom = {
     },
     loadCards: function (boardId) {
         dataHandler.getCardsByBoardId(boardId,function (cards) {
-            dom.showCards(cards)
+            dom.showCards(cards,dom.deleteCard)
         })
     },
     showCards: function (cards, callback) {
         for (let card of cards) {
             dom.createCard(card);
         }
+        callback()
     },
     createCard(card){
         const outerHtml = `
                 <div class="card" id="${card.id}" data_status=${card.status_id}>
-                    <div class="card-remove"><i class="fas fa-trash-alt"></i></div>
-                    <div class="card-title" id="card-${card.id}">${card.title}</div>
+                    <div class="card-remove" id="${card.id}"><i class="fas fa-trash-alt"></i></div>
+                    <div class="card-title" >${card.title}</div>
                </div>`;
             let cardContainers = document.querySelectorAll('.board-column-content');
             for(let statusColumn of cardContainers){
@@ -186,9 +185,22 @@ export let dom = {
         let data = { 'id' : boardId,
                  'table' : 'boards'
         }
-        dataHandler.deleteBoard(data, function(data){
-            console.log(data)
-        })
+        dataHandler.deleteData(data, response => console.log(response) )
+    },
+    deleteCard:function(){
+       let deleteButtons = document.querySelectorAll('.card-remove');
+        for (let deleteButton of deleteButtons) {
+            deleteButton.addEventListener('click', function (event) {
+                let card = event.target.parentNode.parentNode;
+                let cardId = card.id
+                card.remove()
+                let data = {
+                    'id': cardId,
+                    'table': 'cards'
+                }
+                dataHandler.deleteData(data, response => console.log(response))
+            });
+        }
     },
     switch: function(){
         let switchButton = document.querySelector('#switch');

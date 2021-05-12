@@ -97,7 +97,10 @@ export let dataHandler = {
     addNewColumn: function(data,callback) {
         this._api_post(`/add-new-column`, data, response => callback(response))
     },
-    deleteBoard: function(data, callback) {
+    deleteData: function(data, callback) {
         this._api_post(`/delete_data`, data, response => callback(response))
     },
+    // deleteCard: function(data, callback) {
+    //     this._api_post(`/delete_data`, data, response => callback(response))
+    // },
 };
