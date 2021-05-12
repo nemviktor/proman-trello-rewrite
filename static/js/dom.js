@@ -160,7 +160,6 @@ export let dom = {
         })
     },
     renameCard: function(cardId,title, boardId){
-        console.log(cardId,title, boardId)
         let cardTitles = document.querySelectorAll('.card-title')
         for (let cardTitle of cardTitles){
             if(cardTitle.id == cardId){
