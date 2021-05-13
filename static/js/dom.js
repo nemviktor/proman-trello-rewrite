@@ -49,6 +49,7 @@ export let dom = {
         //Putting event listener to the delete-board button
         let deleteBoardButton = document.querySelector(`[delete-board-id='${board.id}']`);
         deleteBoardButton.addEventListener('click', () => dom.deleteBoard(board.id))
+        dom.initNewCardButton();
     },
     loadStatuses: function (boardId) {
         dataHandler.getStatuses(boardId,function (boardId, statuses) {
@@ -105,8 +106,29 @@ export let dom = {
             let cardContainers = document.querySelectorAll('.board-column-content');
             for(let statusColumn of cardContainers){
                 let column_order = statusColumn.parentNode.getAttribute('order');
-                if (column_order == card.status_order && statusColumn.getAttribute('boardId') == card.board_id) {
-                    statusColumn.insertAdjacentHTML("beforeend", outerHtml);
+                if (card.status_order) {
+                    if (column_order == card.status_order && statusColumn.getAttribute('boardId') == card.board_id) {
+                        statusColumn.insertAdjacentHTML("beforeend", outerHtml);
+                    }
+                } else {
+                    if (column_order == card.status_id && statusColumn.getAttribute('boardId') == card.board_id) {
+                        statusColumn.insertAdjacentHTML("beforeend", outerHtml);
+                        let deleteCardElements = document.querySelectorAll('.card-remove');
+                        for (let element of deleteCardElements) {
+                            if (element.id == card.id) {
+                                element.addEventListener('click', function (event) {
+                                    let card = event.target.parentNode.parentNode;
+                                    let cardId = card.id
+                                    card.remove()
+                                    let data = {
+                                        'id': cardId,
+                                        'table': 'cards'
+                                        }
+                                    dataHandler.deleteData(data, response => console.log(response))
+                                });
+                            }
+                        }
+                    }
                 }
             }
             // let cardContainer = document.querySelector("[data-status-id=" + CSS.escape(card.status_id) + "]");
@@ -182,7 +204,6 @@ export let dom = {
                                     'board_id': boardId,
                                     'title': inputValue
                                 }
-                                console.log(data)
                                 dataHandler.renameCard(data, response => console.log(response))
                             }
                         }
@@ -202,6 +223,48 @@ export let dom = {
     displayNewBoard:function(data){
         dom.createBoard(data);
         dom.loadStatuses(data.id)
+    },
+
+    displayNewCard:function (card) {
+        dom.createCard(card);
+    },
+    handleNewCard: function (event) {
+        event.preventDefault();
+        let modal = document.getElementById('myModal');
+        let cardTitle = event.currentTarget.previousElementSibling.value;
+        let boardId = event.currentTarget.dataset.boardid;
+        let statusId = 1;
+        let orderId = 1;
+        modal.style.display = "none";
+        dataHandler.createNewCard(cardTitle, boardId, statusId, orderId, dom.displayNewCard)
+    },
+    modalDisplay:function (event) {
+        let modal = document.getElementById('myModal');
+        modal.style.display = "block";
+
+        let x = document.querySelector('.close');
+        x.addEventListener('click', function () {
+            //modalBody.innerHTML = "";
+            modal.style.display = "none";
+        })
+
+        let closeButton = document.querySelector('#close-button');
+        closeButton.addEventListener('click', function () {
+            //modalBody.innerHTML = "";
+            modal.style.display = "none";
+        })
+
+        let submitCardButton = document.getElementById('submit-card');
+        submitCardButton.dataset.boardid = event.currentTarget.dataset.boardId;
+
+        submitCardButton.addEventListener('click', dom.handleNewCard)
+    },
+    initNewCardButton:function () {
+        let addCardButton = document.querySelectorAll('.board-add');
+        for (let button of addCardButton) {
+
+            button.addEventListener('click', dom.modalDisplay);
+        }
     },
     addNewColumn: function(boardId) {
       let new_status_name = prompt('Name of new status:');

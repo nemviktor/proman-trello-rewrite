@@ -97,10 +97,31 @@ def create_new_board(cursor: RealDictCursor, boardTitle):
     cursor.execute(query)
     return
 
+
+@data_conection.connection_handler
+def create_new_card(cursor: RealDictCursor, cardTitle, boardId, statusId):
+    query = f"""
+            INSERT INTO cards (board_id, title, status_id)
+            VALUES ('{boardId}', '{cardTitle}', '{statusId}');"""
+    cursor.execute(query)
+    return
+
+
 @data_conection.connection_handler
 def last_id(cursor: RealDictCursor, table, key, value) -> list:
     query = '''
             SELECT id, {1}
+            FROM {0}
+            WHERE {1} = '{2}'
+            ORDER BY id desc;'''.format(table, key, value)
+    cursor.execute(query)
+    return cursor.fetchone()
+
+
+@data_conection.connection_handler
+def last_card(cursor: RealDictCursor, table, key, value) -> list:
+    query = '''
+            SELECT id, {1}, board_id, status_id
             FROM {0}
             WHERE {1} = '{2}'
             ORDER BY id desc;'''.format(table, key, value)

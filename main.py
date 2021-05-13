@@ -104,6 +104,18 @@ def create_new_board():
     return data
 
 
+@app.route("/create_new_card", methods=['POST', 'GET'])
+@json_response
+def create_new_card():
+    dataset = request.get_json()
+    cardTitle = dataset['title']
+    boardId = dataset['brdid']
+    statusId = dataset['status']
+    data_handler.create_new_card(cardTitle, boardId, statusId)
+    data = data_handler.last_card('cards', 'title', cardTitle)
+    return data
+
+
 @app.route("/add-new-column", methods=['POST', 'GET'])
 @json_response
 def add_new_column():
