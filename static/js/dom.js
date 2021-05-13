@@ -31,7 +31,7 @@ export let dom = {
                     <button class="board-status-add" add-status-board-id="${board.id}"><i class="icon-columns"></i></button>
                     <button class="board-toggle" id="${board.id}"><i class="fas fa-chevron-down"></i></button>
                 </div>
-                <div class="board-columns"  data-id="${board.id}">
+                <div class="board-columns" id="${board.id}" data-id="${board.id}">
                 </div>
             </section>`;
         let boardsContainer = document.querySelector('.board-container');
@@ -52,25 +52,26 @@ export let dom = {
         dom.initNewCardButton();
     },
     loadStatuses: function (boardId) {
-        console.log(boardId)
         dataHandler.getStatuses(boardId,function (boardId, statuses) {
             dom.showStatuses(boardId, statuses, dom.loadCards);
         });
     },
     showStatuses: function (boardId, statuses, callback) {
-        console.log(boardId, statuses)
         let statusContainerAreas = document.querySelectorAll('.board-columns');
-
-        if (statusContainerAreas !== null && statusContainerAreas.children !== undefined) {
-            statusContainerAreas[boardId-1].innerHTML = '';
+        if (statusContainerAreas.length > 1){
+            for(let area of statusContainerAreas){
+                if (statusContainerAreas !== null  ) {
+                    statusContainerAreas[boardId-1].innerHTML = '';
+                }
+            }
         }
+
         for (let status of statuses) {
             dom.createStatus(status, boardId);
         }
         callback(boardId);
     },
     createStatus(status, boardId){
-        console.log(status, boardId)
          const outerHtml = `
             <div class="board-column" order="${status.order_id}">
                 <div class="board-column-title" id="status-${status.id}">${status.title}</div>
@@ -81,7 +82,6 @@ export let dom = {
             </div>
              `;
             let statusContainerAreas = document.querySelectorAll('.board-columns');
-            console.log(statusContainerAreas)
             if (statusContainerAreas !== null && statusContainerAreas[boardId - 1] !== undefined) {
                 statusContainerAreas[boardId-1].insertAdjacentHTML("beforeend", outerHtml);
             }else{
