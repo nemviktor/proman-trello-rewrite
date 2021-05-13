@@ -31,7 +31,7 @@ export let dom = {
                     <button class="board-status-add" add-status-board-id="${board.id}"><i class="icon-columns"></i></button>
                     <button class="board-toggle" id="${board.id}"><i class="fas fa-chevron-down"></i></button>
                 </div>
-                <div class="board-columns"  data-id="${board.id}">
+                <div class="board-columns" id="${board.id}" data-id="${board.id}">
                 </div>
             </section>`;
         let boardsContainer = document.querySelector('.board-container');
@@ -77,8 +77,10 @@ export let dom = {
             </div>
              `;
             let statusContainerAreas = document.querySelectorAll('.board-columns');
-            if (statusContainerAreas !== null) {
+            if (statusContainerAreas !== null && statusContainerAreas[boardId - 1] !== undefined) {
                 statusContainerAreas[boardId-1].insertAdjacentHTML("beforeend", outerHtml);
+            }else{
+                statusContainerAreas[0].insertAdjacentHTML("beforeend", outerHtml);
             }
             let status_rename = document.querySelector(`#status-${status.id}`);
             // let form = status_rename.children[0];
@@ -217,7 +219,9 @@ export let dom = {
         let add_new_board_button = document.querySelector('#new-board');
         add_new_board_button.addEventListener('click', function () {
             let data = prompt('New Board name:');
-            dataHandler.createNewBoard(data, dom.displayNewBoard)
+            if (data !== null && data !== ''){
+                dataHandler.createNewBoard(data, dom.displayNewBoard)
+            }
         })
     },
     displayNewBoard:function(data){
