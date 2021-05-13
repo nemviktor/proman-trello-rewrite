@@ -58,8 +58,12 @@ export let dom = {
     },
     showStatuses: function (boardId, statuses, callback) {
         let statusContainerAreas = document.querySelectorAll('.board-columns');
-        if (statusContainerAreas !== null) {
-            statusContainerAreas[boardId-1].innerHTML = '';
+        if (statusContainerAreas.length > 1){
+            for(let area of statusContainerAreas){
+                if (statusContainerAreas !== null  ) {
+                    statusContainerAreas[boardId-1].innerHTML = '';
+                }
+            }
         }
         for (let status of statuses) {
             dom.createStatus(status, boardId);
