@@ -27,17 +27,21 @@
 
     <link id="modal" rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/modal.css') }}">
     <link id="css-link" rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/dark_design.css') }}">
-
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/swicher.css') }}">
     <script type="module" src="{{ url_for('static', filename='js/main.js') }}" defer></script>
 </head>
 <body>
 <div id="boards">
     <h1>ProMan</h1>
     <button type="button" id="new-board">Create new board</button>
-    <button type="button" id="switch" class="dark">
-        <i class="fas fa-sun"></i>
-        <i class="fas fa-moon hide"></i>
-    </button>
+    <div class="switcher">
+        <input data-theme="light" type="checkbox" class="checbox" id="checkbox">
+        <label for="checkbox" class="label">
+            <i class="fas fa-moon"></i>
+            <i class="fas fa-sun"></i>
+            <div class="ball"></div>
+        </label>
+    </div>
 
     <div class="board-container">
     </div>

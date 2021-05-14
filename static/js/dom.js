@@ -301,23 +301,36 @@ export let dom = {
             });
         }
     },
-    switch: function(){
-        let switchButton = document.querySelector('#switch');
-        switchButton.addEventListener('click', function(){
-        let link = document.querySelector('#css-link')
-        let sun = document.querySelector('.fa-sun');
-        let moon = document.querySelector('.fa-moon');
-            if (switchButton.classList.contains('dark')){
-                sun.classList.add('hide')
-                moon.classList.remove('hide')
-                switchButton.classList.remove('dark')
-                link.href = "static/css/light_design.css"
-                }else{
-                link.href = "static/css/dark_design.css"
-                switchButton.classList.add('dark')
-                sun.classList.remove('hide')
-                moon.classList.add('hide')
-            }
+    switch: function() {
+        let checkbox = document.getElementById('checkbox');
+        console.log(checkbox);
+        let style = localStorage.getItem('style');
+        if (style == null) {
+            dom.setTheme('dark')
+        } else {
+            dom.setTheme(style);
+        }
+
+        checkbox.addEventListener('change', (event) => {
+            let theme = event.target.dataset.theme
+            dom.setTheme(theme)
         })
+        //
+    },
+    setTheme: function(theme){
+        let checkbox = document.getElementById('checkbox');
+        console.log(theme)
+        let link = document.querySelector('#css-link');
+            if(theme == 'dark'){
+                checkbox.setAttribute('data-theme', 'light')
+                checkbox.checked = false;
+                link.href='static/css/dark_design.css'
+            } else if (theme == 'light'){
+                checkbox.setAttribute('data-theme', 'dark')
+                link.href= 'static/css/light_design.css'
+                checkbox.checked = true;
+            }
+            localStorage.setItem('style', theme)
     }
+
 };
