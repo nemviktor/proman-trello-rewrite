@@ -23,12 +23,12 @@
     font-size: 18px;
 }
 
-.checbox{
+.checkbox{
     opacity: 0;
     position: absolute;
 }
 
-.checbox:checked + .label .ball{
+.checkbox:checked + .label .ball{
     transform: translateX(29px);
 }
 

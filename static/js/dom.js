@@ -303,7 +303,6 @@ export let dom = {
     },
     switch: function() {
         let checkbox = document.getElementById('checkbox');
-        console.log(checkbox);
         let style = localStorage.getItem('style');
         if (style == null) {
             dom.setTheme('dark')
