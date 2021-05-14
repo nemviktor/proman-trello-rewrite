@@ -20,14 +20,6 @@ def get_boards():
     return data_handler.get_data_on_boards('boards')
 
 
-# @app.route("/get-cards/<int:board_id>")
-# @json_response
-# def get_cards_for_board(board_id: int):
-#     """
-#     All cards that belongs to a board
-#     :param board_id: id of the parent board
-#     """
-#     return data_handler.get_cards_for_board(board_id)
 @app.route("/get-cards/<int:board_id>")
 @json_response
 def get_all_cards(board_id):
@@ -41,19 +33,7 @@ def get_statuses(boardid):
     return result
 
 
-# # @app.route('/rename', methods=['POST', 'GET'])
-# @app.route("/rename/<int:boardid>", methods=['POST', 'GET'])
-# @json_response
-# def rename(boardid):
-#     # data = request.get_json()
-#
-#     if request.method == 'POST':
-#         new_name = request.form['new-name']
-#     return data_handler.rename_board(boardid, new_name)
-
-
 @app.route('/rename_board', methods=['POST', 'GET'])
-# @app.route("/rename/<int:boardid>", methods=['POST', 'GET'])
 @json_response
 def rename_board():
     data = request.get_json()
@@ -62,12 +42,12 @@ def rename_board():
 
 
 @app.route('/rename_status', methods=['POST', 'GET'])
-# @app.route("/rename/<int:boardid>", methods=['POST', 'GET'])
 @json_response
 def rename_status():
     data = request.get_json()
     response = data_handler.rename_status(data['id'], data['title'], data['board_id'], data['target_order'])
     return response
+
 
 @app.route('/rename_card', methods=['POST', 'GET'])
 @json_response
@@ -75,25 +55,9 @@ def rename_card():
     card = request.get_json()
     response = data_handler.rename_card(int(card['id']), card['title'])
     return response
-# @app.route("/get-boards")
-# @json_response
-# def get_boards():
-#     """
-#     All the boards
-#     """
-#     return data_handler.get_boards()
-#
-#
-# @app.route("/get-cards/<int:board_id>")
-# @json_response
-# def get_cards_for_board(board_id: int):
-#     """
-#     All cards that belongs to a board
-#     :param board_id: id of the parent board
-#     """
-#     return data_handler.get_cards_for_board(board_id)
-#
-#
+
+
+
 @app.route("/create_new_board", methods=['POST', 'GET'])
 @json_response
 def create_new_board():

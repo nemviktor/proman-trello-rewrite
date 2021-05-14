@@ -87,8 +87,6 @@ export let dom = {
                 statusContainerAreas[0].insertAdjacentHTML("beforeend", outerHtml);
             }
             let status_rename = document.querySelector(`#status-${status.id}`);
-            // let form = status_rename.children[0];
-
             status_rename.addEventListener('click', dom.renameStatus);
     },
     loadCards: function (boardId) {
@@ -137,7 +135,6 @@ export let dom = {
                     }
                 }
             }
-            // let cardContainer = document.querySelector("[data-status-id=" + CSS.escape(card.status_id) + "]");
     },
     toggleButton: function () {
         let boards = document.querySelectorAll(".board-toggle");
@@ -232,7 +229,6 @@ export let dom = {
         dom.createBoard(data);
         dom.loadStatuses(data.id)
     },
-
     displayNewCard:function (card) {
         dom.createCard(card);
     },
@@ -252,7 +248,6 @@ export let dom = {
 
         let x = document.querySelector('.close');
         x.addEventListener('click', function () {
-            //modalBody.innerHTML = "";
             modal.style.display = "none";
         })
 
@@ -270,7 +265,6 @@ export let dom = {
     initNewCardButton:function () {
         let addCardButton = document.querySelectorAll('.board-add');
         for (let button of addCardButton) {
-
             button.addEventListener('click', dom.modalDisplay);
         }
     },

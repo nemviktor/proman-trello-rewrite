@@ -37,11 +37,6 @@ export let dataHandler = {
         });
     },
     init: function () {
-        // let createBoardButton = document.querySelector('#new-board');
-        // createBoardButton.addEventListener('click', function() {
-        //     let boardTitle = prompt('Give me a new board title');
-
-        // })
     },
     getBoards: function (callback) {
         // the boards are retrieved and then the callback function is called with the boards
