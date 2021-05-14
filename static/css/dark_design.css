@@ -40,6 +40,10 @@ button{
     padding: 4px 10px;
 }
 
+button:hover{
+    color: #222222;
+}
+
 .board-container{
     max-width: 960px;
     margin: 0 auto;
