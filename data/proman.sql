@@ -31,34 +31,23 @@ CREATE TABLE board_statuses (
   status_id INTEGER,
   status_order INTEGER
 );
--- CREATE TABLE board_statuses(
---     board_id int not null,
---     status_id int not null,
---     PRIMARY KEY ( board_id, status_id )
--- );
---
--- ALTER TABLE boards
--- ADD CONSTRAINT fk_board_id
--- FOREIGN KEY(board_id)
--- REFERENCES board_statuses(board_id)
--- ON DELETE CASCADE;
---
--- ALTER TABLE statuses
--- ADD CONSTRAINT fk_status_id
--- FOREIGN KEY(status_id)
--- REFERENCES board_statuses(status_id)
--- ON DELETE CASCADE;
---
---
---
--- ALTER TABLE boards
---     ADD CONSTRAINT fk_card_board_id FOREIGN KEY (board_id) REFERENCES boards(id) ON DELETE CASCADE;
---
--- ALTER TABLE cards
---     ADD CONSTRAINT fk_card_status_id FOREIGN KEY (status_id) REFERENCES statuses(id) ON DELETE CASCADE;
---
--- ALTER TABLE statuses
---     ADD CONSTRAINT fk_status_board_id FOREIGN KEY (board_id) REFERENCES boards(id) ON DELETE CASCADE;
+
+DROP TABLE IF EXISTS users;
+CREATE TABLE users (
+  id serial NOT NULL PRIMARY KEY,
+  user_name VARCHAR,
+  password VARCHAR
+);
+
+DROP TABLE IF EXISTS session;
+CREATE TABLE session (
+  id serial NOT NULL PRIMARY KEY,
+  session_id VARCHAR,
+  user_id INTEGER,
+  time TIME
+);
+ALTER TABLE session
+    ADD CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE;
 
 
 INSERT INTO board_statuses (board_id, status_id, status_order)

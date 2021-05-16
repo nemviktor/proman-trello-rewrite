@@ -23,58 +23,77 @@
     <link rel="stylesheet"
           href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 
     <link id="modal" rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/modal.css') }}">
     <link id="css-link" rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/dark_design.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/swicher.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/hamburger_menu.css') }}">
     <script type="module" src="{{ url_for('static', filename='js/main.js') }}" defer></script>
 </head>
-<body>
-<div id="boards">
-    <h1>ProMan</h1>
-    <button type="button" id="new-board">Create new board</button>
-    <div class="switcher">
-        <input data-theme="light" type="checkbox" class="checkbox" id="checkbox">
-        <label for="checkbox" class="label">
-            <i class="fas fa-moon"></i>
-            <i class="fas fa-sun"></i>
-            <div class="ball"></div>
-        </label>
+
+    <div class="header">
+    <!-- Top Navigation Menu -->
+        <div class="topnav">
+            <!-- Navigation links (hidden by default) -->
+            <div id="myLinks">
+                <a href="/register">Register</a>
+                <a href="/login">Login</a>
+            </div>
+            <!-- "Hamburger menu" / "Bar icon" to toggle the navigation links -->
+            <i class="fa fa-bars"></i>
+        </div>
+        <h1>ProMan</h1>
     </div>
 
-    <div class="board-container">
-    </div>
-</div>
+    <div id="boards">
 
-<div id="myModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Add Card</h5>
-            <button type="button" id="x" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">x</span>
-            </button>
+        <!-- New board button & theme changer-->
+        <button type="button" id="new-board">Create new board</button>
+        <div class="switcher">
+            <input data-theme="light" type="checkbox" class="checkbox" id="checkbox">
+            <label for="checkbox" class="label">
+                <i class="fas fa-moon"></i>
+                <i class="fas fa-sun"></i>
+                <div class="ball"></div>
+            </label>
         </div>
-        <div class="modal-body">
-            <form>
-                <input type="text" placeholder="Card title" name="title" required>
-                <button id="submit-card" data-boardid="">Submit</button>
-            </form>
-        </div>
-        <div class="modal-footer">
-            <button id="close-button" type="button"  data-dismiss="modal">Close</button>
-        </div>
+
+        <!-- Boards area -->
+        <div class="board-container"></div>
     </div>
 
-</div>
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-        crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-        crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-        crossorigin="anonymous"></script>
+    <!-- Modal for (new card) inputs -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add Card</h5>
+                <button type="button" id="x" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">x</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <input type="text" placeholder="Card title" name="title" required>
+                    <button id="submit-card" data-boardid="">Submit</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="close-button" type="button"  data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Some scripts for functionality-->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
 </body>
 </html>

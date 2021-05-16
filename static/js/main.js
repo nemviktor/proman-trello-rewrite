@@ -1,5 +1,5 @@
 import { dom } from "./dom.js";
-import {dataHandler} from "./data_handler.js";
+import {hamburger_menu} from "./hamburger_menu.js";
 
 // This function is to initialize the application
 function init() {
@@ -9,6 +9,9 @@ function init() {
     dom.loadBoards();
     dom.create_new_board();
     dom.switch();
+    hamburger_menu();
 }
 
-init();
+window.onload = function() {
+    init();
+}

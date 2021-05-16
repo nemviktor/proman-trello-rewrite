@@ -1,0 +1,44 @@
+/* Style the navigation menu */
+.header{
+  display: block;
+  position: relative;
+}
+
+h1 {
+  display: inline-block;
+  position: relative;
+}
+
+.topnav {
+  /*overflow: hidden;*/
+  position: sticky;
+  top: 20px;
+  right: 50px;
+
+}
+
+.fa.fa-bars {
+  font-size: 30px;
+/*  color: white;*/
+/*  display: inline-block;*/
+/*  position: absolute;*/
+/*  right: 25%;*/
+/*  top: 0px;*/
+}
+
+ /*Style the hamburger menu */
+.topnav i::before {
+  color: white;
+  display: inline-block;
+  position: absolute;
+  right: 10%;
+  top: 20px;
+}
+
+/* Hide the links inside the navigation menu (except for logo/home) */
+#myLinks {
+  display: none;
+  background-color: #0000005e;
+  padding: 14px 16px;
+  font-size: 17px;
+}
