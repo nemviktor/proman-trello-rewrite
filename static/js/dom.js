@@ -264,6 +264,34 @@ export let dom = {
 
         submitCardButton.addEventListener('click', dom.handleNewCard)
     },
+    add_new_board: function () {
+        let add_new_board_button = document.querySelector('#new-board');
+        add_new_board_button.addEventListener('click', function() {
+            dom.modal_board();
+        });
+    },
+    modal_board: function () {
+        let modal = document.getElementById('myModal_board');
+
+        modal.style.display = "block";
+        let x = document.querySelector('.close-board');
+        x.addEventListener('click', function () {
+            modal.style.display = "none";
+        })
+
+        let closeButton = document.querySelector('#board-close-button');
+        closeButton.addEventListener('click', function () {
+            modal.style.display = "none";
+        })
+
+        let submitBoardButton = document.getElementById('submit-board');
+        submitBoardButton.addEventListener('click', () => {
+            let boardTitle = document.querySelector('.input_board_title').value;
+            if (boardTitle !== null && boardTitle !== '') {
+                dataHandler.createNewBoard(boardTitle, dom.loadStatuses)
+            }
+        })
+    },
     initNewCardButton:function () {
         let addCardButton = document.querySelectorAll('.board-add');
         for (let button of addCardButton) {

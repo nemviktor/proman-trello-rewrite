@@ -9,6 +9,7 @@ function init() {
     dom.loadBoards();
     dom.create_new_board();
     dom.switch();
+    dom.add_new_board();
     hamburger_menu();
 }
 
