@@ -58,6 +58,7 @@ export let dom = {
     },
     showStatuses: function (boardId, statuses, callback) {
         let statusContainerAreas = document.querySelectorAll('.board-columns');
+        console.log(statusContainerAreas)
         if (statusContainerAreas.length > 1) {
             for (let area of statusContainerAreas) {
                 if (statusContainerAreas !== null) {
@@ -217,25 +218,40 @@ export let dom = {
         }
 
     },
-    create_new_board: function () {
+    add_new_board: function () {
         let add_new_board_button = document.querySelector('#new-board');
-        add_new_board_button.addEventListener('click', function () {
-            let data = prompt('New Board name:');
-            if (data !== null && data !== '') {
-                dataHandler.createNewBoard(data, dom.displayNewBoard)
+        add_new_board_button.addEventListener('click', function() {
+            dom.modal_board();
+        });
+    },
+    modal_board: function () {
+        let modal = document.getElementById('myModal_board');
+
+        modal.style.display = "block";
+        let x = document.querySelector('.close-board');
+        x.addEventListener('click', function () {
+            modal.style.display = "none";
+        })
+
+        let closeButton = document.querySelector('#board-close-button');
+        closeButton.addEventListener('click', function () {
+            modal.style.display = "none";
+        })
+
+        let submitBoardButton = document.getElementById('submit-board');
+        submitBoardButton.addEventListener('click', () => {
+            let boardTitle = document.querySelector('.input_board_title').value;
+            if (boardTitle !== null && boardTitle !== '') {
+                dataHandler.createNewBoard(boardTitle, dom.loadStatuses)
             }
         })
-    },
-    displayNewBoard: function (data) {
-        dom.createBoard(data);
-        dom.loadStatuses(data.id)
     },
     displayNewCard: function (card) {
         dom.createCard(card);
     },
     handleNewCard: function (event) {
         event.preventDefault();
-        let modal = document.getElementById('myModal');
+        let modal = document.getElementById('myModal_card');
         let cardTitle = event.currentTarget.previousElementSibling.value;
         let boardId = event.currentTarget.dataset.boardid;
         let statusId = 1;
@@ -243,8 +259,8 @@ export let dom = {
         modal.style.display = "none";
         dataHandler.createNewCard(cardTitle, boardId, statusId, orderId, dom.displayNewCard)
     },
-    modalDisplay: function (event) {
-        let modal = document.getElementById('myModal');
+    modalDisplay_card: function (event) {
+        let modal = document.getElementById('myModal_card');
         modal.style.display = "block";
 
         let x = document.querySelector('.close');
@@ -254,7 +270,6 @@ export let dom = {
 
         let closeButton = document.querySelector('#close-button');
         closeButton.addEventListener('click', function () {
-            //modalBody.innerHTML = "";
             modal.style.display = "none";
         })
 
@@ -266,7 +281,7 @@ export let dom = {
     initNewCardButton: function () {
         let addCardButton = document.querySelectorAll('.board-add');
         for (let button of addCardButton) {
-            button.addEventListener('click', dom.modalDisplay);
+            button.addEventListener('click', dom.modalDisplay_card);
         }
     },
     addNewColumn: function (boardId) {
@@ -324,7 +339,6 @@ export let dom = {
     },
     setTheme: function (theme) {
         let checkbox = document.getElementById('checkbox');
-        console.log(theme)
         let link = document.querySelector('#css-link');
         if (theme == 'dark') {
             checkbox.setAttribute('data-theme', 'light')
@@ -342,6 +356,7 @@ export let dom = {
         for (let card of draggable_cards) {
             card.addEventListener('dragstart', (event) => {
                 card.classList.add('dragging');
+                console.log(event.target.parentNode.childNodes)
                 if (event.target.parentNode.childNodes.length == 3) {
                     let new_drop_neighbour = document.createElement('div');
                     new_drop_neighbour.classList.add('droppable');

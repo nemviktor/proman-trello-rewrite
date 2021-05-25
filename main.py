@@ -65,7 +65,7 @@ def create_new_board():
     data_handler.create_new_board(boardTitle)
     data = data_handler.last_id('boards', 'title', boardTitle)
     data_handler.add_default_statuses_to_board(data['id'])
-    return data
+    return data['id']
 
 
 @app.route("/create_new_card", methods=['POST', 'GET'])
