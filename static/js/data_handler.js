@@ -85,6 +85,9 @@ export let dataHandler = {
         this._api_post(`./create_new_card`, data, response => callback(response))
         // creates new card, saves it and calls the callback function with its data
     },
+    createNewStatus: function (data, callback) {
+        this._api_post(`./add-new-column`, data,response => callback(response))
+    },
     renameBoard: function(data ,callback) {
         this._api_post(`./rename_board`, data,response => callback(response))
     },

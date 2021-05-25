@@ -78,21 +78,26 @@ export let dom = {
         callback()
     },
     createCard(card) {
-        const outerHtml = `
-                <div class="card droppable" draggable="true" card-order="${card.order}" id="${card.id}" data_status=${card.status_id}>
-                    <div class="card-remove" id="${card.id}"><i class="fas fa-trash-alt"></i></div>
-                    <div class="card-title" id="${card.id}" >${card.title}</div>
-                </div>`;
         let cardContainers = document.querySelectorAll('.board-column-content');
+        let template = document.querySelector('.card-template');
+        let clone = template.content.cloneNode('true');
+        clone.querySelector('.card').setAttribute('draggable', 'true');
+        clone.querySelector('.card').setAttribute('card-order', `${card.order}`);
+        clone.querySelector('.card').id = `${card.id}`;
+        clone.querySelector('.card').setAttribute('data_status', `${card.status_id}`);
+        clone.querySelector('.card-remove').id = `${card.id}`;
+        clone.querySelector('.card-title').id = `${card.id}`;
+        clone.querySelector('.card-title').innerHTML = `${card.title}`;
+
         for (let statusColumn of cardContainers) {
             let column_order = statusColumn.parentNode.getAttribute('order');
             if (card.status_order) {
                 if (column_order == card.status_order && statusColumn.getAttribute('boardId') == card.board_id) {
-                    statusColumn.insertAdjacentHTML("beforeend", outerHtml);
+                    statusColumn.appendChild(clone);
                 }
             } else {
                 if (column_order == card.status_id && statusColumn.getAttribute('boardId') == card.board_id) {
-                    statusColumn.insertAdjacentHTML("beforeend", outerHtml);
+                    statusColumn.appendChild(clone);
                     let deleteCardElements = document.querySelectorAll('.card-remove');
                     for (let element of deleteCardElements) {
                         if (element.id == card.id) {
@@ -201,7 +206,7 @@ export let dom = {
             modal.style.display = "none";
         })
 
-        let closeButton = document.querySelector('#board-close-button');
+        let closeButton = document.querySelector('.board-close-button');
         closeButton.addEventListener('click', function () {
             modal.style.display = "none";
         })
@@ -231,12 +236,12 @@ export let dom = {
         let modal = document.getElementById('myModal_card');
         modal.style.display = "block";
 
-        let x = document.querySelector('.close');
+        let x = document.querySelector('.close-card');
         x.addEventListener('click', function () {
             modal.style.display = "none";
         })
 
-        let closeButton = document.querySelector('#close-button');
+        let closeButton = document.querySelector('.card-close-button');
         closeButton.addEventListener('click', function () {
             modal.style.display = "none";
         })
@@ -247,16 +252,34 @@ export let dom = {
         submitCardButton.addEventListener('click', dom.handleNewCard)
     },
     addNewColumn: function(event) {
-      let boardId = event.currentTarget.getAttribute('add-status-board-id');
-      let new_status_name = prompt('Name of new status:');
-      let new_order = prompt('Order of the new status column');
-      let data = {'status': {'order_id': new_order,
-                             'title':new_status_name},
-                  'boardID':boardId};
-      dataHandler.addNewColumn(data, function() {
-          // dom.loadStatus();
-          dom.loadStatuses(data.boardID);
-      })
+        let add_new_col_buttons = document.querySelectorAll('.board-status-add');
+        for (let button of add_new_col_buttons) {
+            button.addEventListener('click', function() {
+                dom.modalColumn();
+            })
+        };
+    },
+    modalColumn: function() {
+        let modal = document.getElementById('myModal_col');
+
+        modal.style.display = "block";
+        let x = document.querySelector('.close-status');
+        x.addEventListener('click', function () {
+            modal.style.display = "none";
+        })
+
+        let closeButton = document.querySelector('.status-close-button');
+        closeButton.addEventListener('click', function () {
+            modal.style.display = "none";
+        })
+
+        let submitStatusButton = document.getElementById('submit-status');
+        submitStatusButton.addEventListener('click', () => {
+            let statusTitle = document.getElementById('status_id').value;
+            if (statusTitle !== null && statusTitle !== '') {
+                dataHandler.createNewStatus(statusTitle, dom.loadStatuses)
+            }
+        })
     },
     deleteBoard: function(event){
         let board = event.currentTarget.parentNode;

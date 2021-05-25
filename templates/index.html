@@ -70,7 +70,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Add Card</h5>
-                <button type="button" id="x" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" id="x" class="close-card" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">x</span>
                 </button>
             </div>
@@ -82,7 +82,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button id="close-button" type="button"  data-dismiss="modal">Close</button>
+                <button class="card-close-button" type="button"  data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -104,10 +104,33 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button id="board-close-button" type="button"  data-dismiss="modal">Close</button>
+                <button class="board-close-button" type="button"  data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
+
+    <!--Modal for new column-->
+    <div id="myModal_col" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add Status</h5>
+                <button type="button" id="x" class="close-status" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">x</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <input id="status_id" type="text" placeholder="Status title" name="title" required>
+                    <br>
+                    <button id="submit-status" data-boardid="">Submit</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="status-close-button" type="button"  data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+
     <template class="board-template">
         <section class="board" >
             <div class="board-header">
@@ -125,6 +148,7 @@
             </div>
         </section>
     </template>
+
     <template class="status-template">
       <div class="board-column">
             <div class="board-column-title"></div>
@@ -134,6 +158,13 @@
             <div class="board-column-content">
         </div>
       </div>
+    </template>
+
+    <template class="card-template">
+        <div class="card droppable" draggable="true" card-order="${card.order}" id="${card.id}" data_status=${card.status_id}>
+            <div class="card-remove" id="${card.id}"><i class="fas fa-trash-alt"></i></div>
+            <div class="card-title" id="${card.id}" >${card.title}</div>
+        </div>
     </template>
 
     <!-- Some scripts for functionality-->

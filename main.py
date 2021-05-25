@@ -84,7 +84,7 @@ def create_new_card():
 @json_response
 def add_new_column():
     data = request.get_json()
-    id_response = data_handler.add_new_column(data['status']['title'], data['status']['order_id'], data['boardID'])
+    id_response = data_handler.add_new_column(data, data['boardID'])
     data['status']['id'] = id_response
     return data
 
