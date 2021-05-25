@@ -66,7 +66,7 @@
 
 
     <!-- Modal for (new card) inputs -->
-    <div id="myModal" class="modal">
+    <div id="myModal_card" class="modal">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Add Card</h5>
@@ -82,6 +82,27 @@
             </div>
             <div class="modal-footer">
                 <button id="close-button" type="button"  data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for (new board) inputs -->
+    <div id="myModal_board" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Create New Board</h5>
+                <button type="button" id="x" class="close-board" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">x</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <input class="input_board_title" type="text" board_name="Board title" name="title" required>
+                    <button id="submit-board">Submit</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="board-close-button" type="button"  data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
