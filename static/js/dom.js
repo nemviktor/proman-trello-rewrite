@@ -29,47 +29,13 @@ export let dom = {
         clone.querySelector('.board-remove').setAttribute('delete-board-id', board.id);
         clone.querySelector('.board-remove').addEventListener('click',dom.deleteBoard);
         clone.querySelector('.card-add').setAttribute('data-board-id', board.id);
-        clone.querySelector('.card-add').addEventListener('click', dom.modalDisplay)
+        clone.querySelector('.card-add').addEventListener('click', dom.modalCard)
         clone.querySelector('.board-status-add').setAttribute('add-status-board-id', board.id);
         clone.querySelector('.board-status-add').addEventListener('click',dom.addNewColumn)
         clone.querySelector('.board-columns').id = board.id;
         clone.querySelector('.board-columns').setAttribute('data-id', board.id);
         clone.querySelector('.board-toggle').addEventListener('click', dom.boardToggle)
         boardContainer.appendChild(clone);
-        // dom.initNewCardButton();
-    // createBoard: function (board) {
-    //     const outerHtml = `
-    //         <section class="board" id="board-${board.id}">
-    //             <div class="board-header" id="${board.id}">
-    //                 <span class="board-title" id="title${board.id}">${board.title}</span>
-    //                 <form class="board-form hide" id="${board.id}">
-    //                     <input type="text" class="new-name">
-    //                     <button type="submit" class="save">Save</button>
-    //                 </form>
-    //                 <button class="board-remove" delete-board-id="${board.id}"><i class="fas fa-trash-alt"></i></button>
-    //                 <button class="board-add" data-board-id="${board.id}">Add Card</button>
-    //                 <button class="board-status-add" add-status-board-id="${board.id}"><i class="icon-columns"></i></button>
-    //                 <button class="board-toggle" id="${board.id}"><i class="fas fa-chevron-down"></i></button>
-    //             </div>
-    //             <div class="board-columns" id="${board.id}" data-id="${board.id}">
-    //             </div>
-    //         </section>`;
-    //     let boardsContainer = document.querySelector('.board-container');
-    //     boardsContainer.insertAdjacentHTML("beforeend", outerHtml);
-    //
-    //     //Putting event listener to the brand new board title
-    //     let title_to_enable_rename = document.querySelector(`#title${board.id}`);
-    //     title_to_enable_rename.addEventListener('click', dom.renameBoard);
-    //
-    //     //Putting event listener to the add-board-column button
-    //     let add_status_column = document.querySelector(`[add-status-board-id='${board.id}']`);
-    //     add_status_column.addEventListener('click', () => {
-    //         dom.addNewColumn((board.id));
-    //     });
-    //     //Putting event listener to the delete-board button
-    //     let deleteBoardButton = document.querySelector(`[delete-board-id='${board.id}']`);
-    //     deleteBoardButton.addEventListener('click', () => dom.deleteBoard(board.id))
-    //     dom.initNewCardButton();
     },
     loadStatuses: function (boardId) {
         dataHandler.getStatuses(boardId, function (boardId, statuses) {
@@ -77,27 +43,6 @@ export let dom = {
         });
     },
     showStatuses: function (boardId, statuses, callback) {
-        console.log(statuses)
-        let statusContainerAreas = document.querySelectorAll('.board-columns');
-        // for (let container of statusContainerAreas) {
-        //     container.innerHTML = "";
-        // }
-
-        // if (statusContainerAreas.length > 1){
-        //     for(let area of statusContainerAreas){
-        //         if (statusContainerAreas !== null  ) {
-        //             statusContainerAreas[boardId-1].innerHTML = '';
-        //         }
-        //     }
-        // }
-        // console.log(statusContainerAreas)
-        // if (statusContainerAreas.length > 1) {
-        //     for (let area of statusContainerAreas) {
-        //         if (statusContainerAreas !== null) {
-        //             statusContainerAreas[boardId - 1].innerHTML = '';
-        //         }
-        //     }
-        // }
         for (let status of statuses) {
             dom.createStatus(status, boardId);
         }
@@ -118,41 +63,6 @@ export let dom = {
         clone.querySelector('.board-column-content').setAttribute('status-title', status.title);
         clone.querySelector('.board-column-content').setAttribute('data-status-id', status.id);
         boardColumn.appendChild(clone);
-        //  const outerHtml = `
-        //     <div class="board-column" order="${status.order_id}">
-        //         <div class="board-column-title" id="status-${status.id}">${status.title}</div>
-        //         <form class="hide" id=`${status.id}`>
-        //             <input type="text" class="new-name">
-        //         </form>
-        //         <div class="board-column-content" data-status-id="${status.id}" data-status="${status.title}" data-order="${status.order_id}" boardid=${boardId}  id="${status.id}">
-        //     </div>
-        //      `;
-        //     let statusContainerAreas = document.querySelectorAll('.board-columns');
-        //     if (statusContainerAreas !== null && statusContainerAreas[boardId - 1] !== undefined) {
-        //         statusContainerAreas[boardId-1].insertAdjacentHTML("beforeend", outerHtml);
-        //     }else{
-        //         statusContainerAreas[0].insertAdjacentHTML("beforeend", outerHtml);
-        //     }
-        //     let status_rename = document.querySelector(`#status-${status.id}`);
-        //     status_rename.addEventListener('click', dom.renameStatus);
-    // createStatus(status, boardId) {
-    //     const outerHtml = `
-    //         <div class="board-column " order="${status.order_id}">
-    //             <div class="board-column-title" id="status-${status.id}">${status.title}</div>
-    //             <form class="hide" id="${status.id}">
-    //                 <input type="text" class="new-name">
-    //             </form>
-    //             <div class="board-column-content" data-status-id="${status.id}" data-status="${status.title}" data-order="${status.order_id}" boardid=${boardId}  id="${status.id}">
-    //         </div>
-    //          `;
-    //     let statusContainerAreas = document.querySelectorAll('.board-columns');
-    //     if (statusContainerAreas !== null && statusContainerAreas[boardId - 1] !== undefined) {
-    //         statusContainerAreas[boardId - 1].insertAdjacentHTML("beforeend", outerHtml);
-    //     } else {
-    //         statusContainerAreas[0].insertAdjacentHTML("beforeend", outerHtml);
-    //     }
-    //     let status_rename = document.querySelector(`#status-${status.id}`);
-    //     status_rename.addEventListener('click', dom.renameStatus);
     },
     loadCards: function (boardId) {
         dataHandler.getCardsByBoardId(boardId, function (cards) {
@@ -275,15 +185,14 @@ export let dom = {
                 })
             }
         }
-
     },
-    add_new_board: function () {
+    addNewBoard: function () {
         let add_new_board_button = document.querySelector('#new-board');
         add_new_board_button.addEventListener('click', function() {
-            dom.modal_board();
+            dom.modalBoard();
         });
     },
-    modal_board: function () {
+    modalBoard: function () {
         let modal = document.getElementById('myModal_board');
 
         modal.style.display = "block";
@@ -318,7 +227,7 @@ export let dom = {
         modal.style.display = "none";
         dataHandler.createNewCard(cardTitle, boardId, statusId, orderId, dom.displayNewCard)
     },
-    modalDisplay_card: function (event) {
+    modalCard: function (event) {
         let modal = document.getElementById('myModal_card');
         modal.style.display = "block";
 
@@ -336,12 +245,6 @@ export let dom = {
         submitCardButton.dataset.boardid = event.currentTarget.dataset.boardId;
 
         submitCardButton.addEventListener('click', dom.handleNewCard)
-    },
-    initNewCardButton:function () {
-        let addCardButton = document.querySelectorAll('.board-add');
-        for (let button of addCardButton) {
-            button.addEventListener('click', dom.modalDisplay_card);
-        }
     },
     addNewColumn: function(event) {
       let boardId = event.currentTarget.getAttribute('add-status-board-id');
@@ -432,7 +335,6 @@ export let dom = {
         for (let card of draggable_cards) {
             card.addEventListener('dragstart', (event) => {
                 card.classList.add('dragging');
-                console.log(event.target.parentNode.childNodes)
                 if (event.target.parentNode.childNodes.length == 3) {
                     let new_drop_neighbour = document.createElement('div');
                     new_drop_neighbour.classList.add('droppable');
