@@ -74,7 +74,8 @@ export let dom = {
             dom.createCard(card);
             dom.renameCard(card.id, card.title, card.board_id)
         }
-        dom.dragging();
+        dom.checkStatusEmpty();
+        // dom.dragging();
     },
     createCard(card) {
         let cardContainers = document.querySelectorAll('.board-column-content');
@@ -84,6 +85,7 @@ export let dom = {
         clone.querySelector('.card').setAttribute('card-order', `${card.order}`);
         clone.querySelector('.card').id = `${card.id}`;
         clone.querySelector('.card').setAttribute('data_status', `${card.status_id}`);
+        clone.querySelector('.card').addEventListener('dragstart', dom.dragging)
         clone.querySelector('.card-remove').id = `${card.id}`;
         clone.querySelector('.card-remove').addEventListener('click',dom.deleteCard);
         clone.querySelector('.card-title').id = `${card.id}`;
@@ -327,45 +329,86 @@ export let dom = {
         }
         localStorage.setItem('style', theme)
     },
-    dragging: function () {
-        let draggable_cards = document.querySelectorAll('.card');
-        for (let card of draggable_cards) {
-            card.addEventListener('dragstart', (event) => {
-                card.classList.add('dragging');
-                if (event.target.parentNode.childNodes.length == 3) {
-                    let new_drop_neighbour = document.createElement('div');
-                    new_drop_neighbour.classList.add('droppable');
-                    new_drop_neighbour.innerHTML = "Drop something here!";
-                    let container = event.target.parentNode;
-                    container.appendChild(new_drop_neighbour);
+    dragging: function (event) {
+        let card = event.currentTarget;
+        card.classList.add('dragging');
+        let droppables = document.querySelectorAll('.droppable');
+        for (let drop_neighbour of droppables) {
+            drop_neighbour.addEventListener('dragover', (event) => {
+                let dragged_element = document.querySelector('.dragging');
+                if (event.target.classList.contains('droppable')) {
+                    drop_neighbour.insertAdjacentElement('afterend', dragged_element);
+                    dom.checkStatusEmpty()
                 }
+            })
+        }
+        card.addEventListener('dragend', () => {
+            card.classList.remove('dragging');
+            console.log(card.parentNode.children[0])
+            if (card.parentNode.children[0].classList.contains('empty')){
+                console.log(card.parentNode.children)
+                card.parentNode.removeChild(card.parentNode.children[0]);
+            }
+        })
+    },
 
-                let droppables = document.querySelectorAll('.droppable');
-                for (let drop_neighbour of droppables) {
-                    drop_neighbour.addEventListener('dragover', (event) => {
-                        let dragged_element = document.querySelector('.dragging');
-                        if (event.target.classList.contains('droppable')) {
-                            drop_neighbour.insertAdjacentElement('afterend', dragged_element);
-                        }
-                    })
-                }
-            })
-            card.addEventListener('dragend', () => {
-                card.classList.remove('dragging');
-                if (card.parentNode.childNodes[2].innerHTML === 'Drop something here!') {
-                    card.parentNode.removeChild(card.parentNode.childNodes[2]);
-                }
-            })
-            // let droppables = document.querySelectorAll('.droppable');
-            // console.log(droppables)
-            // for (let drop_neighbour of droppables) {
-            //     drop_neighbour.addEventListener('dragover',(event) => {
-            //         let dragged_element = document.querySelector('.dragging');
-            //         if (event.target.classList.contains('droppable')) {
-            //             drop_neighbour.insertAdjacentElement('afterend',dragged_element);
-            //         }
-            //     })
-            // }
+    // dragging: function () {
+    //     let draggable_cards = document.querySelectorAll('.card');
+    //     for (let card of draggable_cards) {
+    //         card.addEventListener('dragstart', (event) => {
+    //             card.classList.add('dragging');
+    //             // dom.checkStatus();
+    //
+    //             // if (event.target.parentNode.childNodes.length == 3) {
+    //             //     let new_drop_neighbour = document.createElement('div');
+    //             //     new_drop_neighbour.classList.add('droppable');
+    //             //     new_drop_neighbour.innerHTML = "Drop something here!";
+    //             //     let container = event.target.parentNode;
+    //             //     container.appendChild(new_drop_neighbour);
+    //             // }
+    //
+    //             let droppables = document.querySelectorAll('.droppable');
+    //             for (let drop_neighbour of droppables) {
+    //                 drop_neighbour.addEventListener('dragover', (event) => {
+    //                     let dragged_element = document.querySelector('.dragging');
+    //                     if (event.target.classList.contains('droppable')) {
+    //                         drop_neighbour.insertAdjacentElement('afterend', dragged_element);
+    //                         dom.checkStatus()
+    //                     }
+    //                 })
+    //             }
+    //         })
+    //         card.addEventListener('dragend', () => {
+    //             card.classList.remove('dragging');
+    //             console.log(card.parentNode.children[0])
+    //             if (card.parentNode.children[0].classList.contains('empty')){
+    //                 console.log(card.parentNode.children)
+    //                 card.parentNode.removeChild(card.parentNode.children[0]);
+    //             }
+    //         })
+    //
+    //         let droppables = document.querySelectorAll('.droppable');
+    //         console.log(droppables)
+    //         for (let drop_neighbour of droppables) {
+    //             drop_neighbour.addEventListener('dragover',(event) => {
+    //                 let dragged_element = document.querySelector('.dragging');
+    //                 if (event.target.classList.contains('droppable')) {
+    //                     drop_neighbour.insertAdjacentElement('afterend',dragged_element);
+    //                 }
+    //             })
+    //         }
+    //     }
+    // },
+    checkStatusEmpty: function(){
+    let boardColumnContents = document.querySelectorAll('.board-column-content')
+    for (let content of boardColumnContents){
+        if(content.children.length == 0) {
+            let new_drop_neighbour = document.createElement('div');
+            new_drop_neighbour.classList.add('droppable');
+            new_drop_neighbour.classList.add('empty');
+            new_drop_neighbour.innerHTML = " ";
+            content.appendChild(new_drop_neighbour);
+            }
         }
     }
 }
