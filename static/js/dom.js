@@ -344,14 +344,11 @@ export let dom = {
         }
         card.addEventListener('dragend', () => {
             card.classList.remove('dragging');
-            console.log(card.parentNode.children[0])
             if (card.parentNode.children[0].classList.contains('empty')){
-                console.log(card.parentNode.children)
                 card.parentNode.removeChild(card.parentNode.children[0]);
             }
         })
     },
-
     // dragging: function () {
     //     let draggable_cards = document.querySelectorAll('.card');
     //     for (let card of draggable_cards) {
@@ -410,6 +407,6 @@ export let dom = {
             content.appendChild(new_drop_neighbour);
             }
         }
-    }
+    },
 }
 

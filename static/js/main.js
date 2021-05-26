@@ -1,5 +1,5 @@
 import { dom } from "./dom.js";
-import {hamburger_menu, animation} from "./hamburger_menu.js";
+import {animation} from "./hamburger_menu.js";
 
 // This function is to initialize the application
 function init() {
@@ -7,7 +7,6 @@ function init() {
     dom.loadBoards();
     dom.switch();
     dom.addNewBoard();
-    hamburger_menu();
     animation();
 }
 

@@ -10,9 +10,9 @@ h1 {
 }
 
 
-.fa.fa-bars {
-  font-size: 30px;
-}
+/*.fa.fa-bars {*/
+/*  font-size: 30px;*/
+/*}*/
 
 
 .container {
@@ -45,13 +45,15 @@ h1 {
 #myLinks {
   position: absolute;
   display: none;
-  width: 200px;
-  margin: -100px 0 0 0;
-  padding: 50px;
-  padding-top: 80px;
-  right: 0px;
-  background: #978a8a90;
+  top: -50px;
+  right: 10%;
   list-style-type: none;
+  transition: top 2s;
+}
+
+#myLinks.change {
+  display: block;
+  top: 0px;
 }
 
 #myLinks a{
@@ -60,5 +62,9 @@ h1 {
 }
 
 #myLinks li{
+  display: inline-block;
   padding: 10px;
+  border-bottom-left-radius: 70%;  /* 100px of height + 10px of border */
+  border-bottom-right-radius: 70%; /* 100px of height + 10px of border */
+  background-color: darkgrey;
 }
