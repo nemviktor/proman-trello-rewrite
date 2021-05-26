@@ -66,7 +66,7 @@ export let dom = {
     },
     loadCards: function (boardId) {
         dataHandler.getCardsByBoardId(boardId, function (cards) {
-            dom.showCards(cards, dom.deleteCard)
+            dom.showCards(cards)
         })
     },
     showCards: function (cards, callback) {
@@ -75,7 +75,7 @@ export let dom = {
             dom.renameCard(card.id, card.title, card.board_id)
         }
         dom.dragging();
-        callback()
+        // callback()
     },
     createCard(card) {
         let cardContainers = document.querySelectorAll('.board-column-content');
@@ -86,6 +86,7 @@ export let dom = {
         clone.querySelector('.card').id = `${card.id}`;
         clone.querySelector('.card').setAttribute('data_status', `${card.status_id}`);
         clone.querySelector('.card-remove').id = `${card.id}`;
+        clone.querySelector('.card-remove').addEventListener('click',dom.deleteCard);
         clone.querySelector('.card-title').id = `${card.id}`;
         clone.querySelector('.card-title').innerHTML = `${card.title}`;
 
@@ -98,21 +99,6 @@ export let dom = {
             } else {
                 if (column_order == card.status_id && statusColumn.getAttribute('boardId') == card.board_id) {
                     statusColumn.appendChild(clone);
-                    let deleteCardElements = document.querySelectorAll('.card-remove');
-                    for (let element of deleteCardElements) {
-                        if (element.id == card.id) {
-                            element.addEventListener('click', function (event) {
-                                let card = event.target.parentNode.parentNode;
-                                let cardId = card.id
-                                card.remove()
-                                let data = {
-                                    'id': cardId,
-                                    'table': 'cards'
-                                }
-                                dataHandler.deleteData(data, response => console.log(response))
-                            });
-                        }
-                    }
                 }
             }
         }
@@ -309,20 +295,15 @@ export let dom = {
         }
         dataHandler.deleteData(data, response => console.log(response))
     },
-    deleteCard: function () {
-        let deleteButtons = document.querySelectorAll('.card-remove');
-        for (let deleteButton of deleteButtons) {
-            deleteButton.addEventListener('click', function (event) {
-                let card = event.target.parentNode.parentNode;
-                let cardId = card.id
-                card.remove()
-                let data = {
-                    'id': cardId,
-                    'table': 'cards'
-                }
-                dataHandler.deleteData(data, response => console.log(response))
-            });
+    deleteCard: function (event) {
+        let card = event.currentTarget;
+        let cardId = card.id;
+        card.parentNode.remove()
+        let data = {
+            'id': cardId,
+            'table': 'cards'
         }
+        dataHandler.deleteData(data, response => console.log(response))
     },
     switch: function () {
         let checkbox = document.getElementById('checkbox');
