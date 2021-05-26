@@ -69,13 +69,12 @@ export let dom = {
             dom.showCards(cards)
         })
     },
-    showCards: function (cards, callback) {
+    showCards: function (cards) {
         for (let card of cards) {
             dom.createCard(card);
             dom.renameCard(card.id, card.title, card.board_id)
         }
         dom.dragging();
-        // callback()
     },
     createCard(card) {
         let cardContainers = document.querySelectorAll('.board-column-content');
@@ -206,13 +205,15 @@ export let dom = {
         })
     },
     displayNewCard: function (card) {
+        console.log(`displaycard ${card}`)
         dom.createCard(card);
     },
     handleNewCard: function (event) {
         event.preventDefault();
         let modal = document.getElementById('myModal_card');
-        let cardTitle = event.currentTarget.previousElementSibling.value;
-        let boardId = event.currentTarget.dataset.boardid;
+        let cardTitle = event.currentTarget.previousElementSibling.previousElementSibling.value;
+        console.log(cardTitle)
+        let boardId = parseInt(event.currentTarget.dataset.boardid);
         let statusId = 1;
         let orderId = 1;
         modal.style.display = "none";
