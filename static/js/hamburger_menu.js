@@ -9,3 +9,11 @@ export function hamburger_menu() {
         }
     })
 }
+
+
+export function animation(){
+    let container = document.querySelector('.container')
+    container.addEventListener('click', ()=>{
+        container.classList.toggle('change');
+    })
+}
