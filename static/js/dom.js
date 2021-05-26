@@ -31,7 +31,7 @@ export let dom = {
         clone.querySelector('.card-add').setAttribute('data-board-id', board.id);
         clone.querySelector('.card-add').addEventListener('click', dom.modalCard)
         clone.querySelector('.board-status-add').setAttribute('add-status-board-id', board.id);
-        clone.querySelector('.board-status-add').addEventListener('click',dom.addNewColumn)
+        clone.querySelector('.board-status-add').addEventListener('click',dom.modalColumn)
         clone.querySelector('.board-columns').id = board.id;
         clone.querySelector('.board-columns').setAttribute('data-id', board.id);
         clone.querySelector('.board-toggle').addEventListener('click', dom.boardToggle)
@@ -237,14 +237,6 @@ export let dom = {
         submitCardButton.dataset.boardid = event.currentTarget.dataset.boardId;
 
         submitCardButton.addEventListener('click', dom.handleNewCard)
-    },
-    addNewColumn: function(event) {
-        let add_new_col_buttons = document.querySelectorAll('.board-status-add');
-        for (let button of add_new_col_buttons) {
-            button.addEventListener('click', function() {
-                dom.modalColumn();
-            })
-        };
     },
     modalColumn: function() {
         let modal = document.getElementById('myModal_col');
