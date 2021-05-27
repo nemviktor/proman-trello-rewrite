@@ -9,6 +9,7 @@ function init() {
     dom.addNewBoard();
     hamburger_menu();
     animation();
+    dom.registration();
 }
 
 window.onload = function() {

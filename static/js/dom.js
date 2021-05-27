@@ -1,5 +1,9 @@
 import {dataHandler} from "./data_handler.js";
 
+let modal = document.getElementById("myModal");
+
+
+
 export let dom = {
     init: function () {
     },
@@ -410,6 +414,95 @@ export let dom = {
             content.appendChild(new_drop_neighbour);
             }
         }
-    }
+    },
+
+    closeModalX: function (){
+        let closeX = document.querySelector('.close');
+        closeX.addEventListener('click', function() {
+            modal.style.display = "none";
+        })
+    },
+    closeModalButton: function () {
+        let closeButton = document.getElementById('close-button');
+        closeButton.addEventListener('click', function () {
+            modal.style.display = "none";
+        })
+    },
+
+    initRegistration: function() {
+        modal.style.display = "block";
+        document.querySelector('.modal-title').innerText = "Registration";
+        let modalBody = document.querySelector('.modal-body');
+        let htmlText =
+            `<div class="registration-container">
+                <form id="form" > 
+                    <p id="error" hidden>Username already exists, please choose another one!</p>
+                    <div><label for="username">Username:</label></div>
+                    <div><input type="text" id="username" name="username" required></div>
+                    <div><label for="email">E-mail:</label></div>
+                    <div><input type="email" id="email" name="email"  required></div>
+                    <div><label for="password">Password:</label></div>
+                    <div><input type="password" id="password" name="password" required></div>
+                    <div><label for="password_2">Password again:</label></div>
+                    <div><input type="password" id="password_2" name="password_2" required></div>
+                        
+                    <div><button id="confirm-button" class="btn btn-primary" type="submit">Confirm</button></div>
+                </form>
+            </div>`;
+        modalBody.innerHTML = htmlText;
+
+        dom.closeModalX();
+        dom.closeModalButton();
+
+        let form = document.getElementById('form')
+        form.onsubmit = dom.submitRegistration;
+    },
+
+    submitRegistration: function (event) {
+        let username = document.getElementById('username').value;
+        let email = document.getElementById('email').value;
+        let password = document.getElementById('password').value;
+        let error = document.getElementById("error");
+        let registerDiv = document.querySelector('.registration-container');
+        let modalBody = document.querySelector('.modal-body');
+        event.preventDefault();
+        fetch('/check-username/' + username)
+            .then(resp => resp.json())
+            .then(data => {
+                if (data) {
+                    error.removeAttribute('hidden');
+                } else {
+                    const userData = {username: username, email: email, password: password};
+                    fetch('/registration', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(userData),
+                        })
+                        .then(resp => resp.json())
+                        .then(data => console.log(data))
+                        .then(function (){
+                            error.setAttribute('hidden', '');
+                            registerDiv.remove();
+
+                            modalBody.innerHTML =
+                                `<p>Successful registration. Log in to continue.</p>
+                                <form id="login-form"> 
+                                    <button id="login-button" class="btn btn-primary" type="submit">Login</button>
+                                </form>`;
+                            document.getElementById('login-button').addEventListener('click', login);
+                            })
+                    }
+            });
+
+    },
+    registration: function () {
+        let registration = document.getElementById("register");
+        registration.addEventListener('click', dom.initRegistration);
+    },
+
+
+
 }
 
