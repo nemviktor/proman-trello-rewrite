@@ -9,12 +9,6 @@ h1 {
   position: relative;
 }
 
-
-/*.fa.fa-bars {*/
-/*  font-size: 30px;*/
-/*}*/
-
-
 .container {
   display: block;
   position: relative;
@@ -44,11 +38,11 @@ h1 {
 
 #myLinks {
   position: absolute;
-  display: none;
+  display: block;
   top: -50px;
   right: 10%;
   list-style-type: none;
-  transition: top 2s;
+  transition: 0.4s;
 }
 
 #myLinks.change {
@@ -68,3 +62,4 @@ h1 {
   border-bottom-right-radius: 70%; /* 100px of height + 10px of border */
   background-color: darkgrey;
 }
+
