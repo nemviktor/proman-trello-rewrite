@@ -32,7 +32,6 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/hamburger_menu.css') }}">
     <script type="module" src="{{ url_for('static', filename='js/main.js') }}" defer></script>
 </head>
-
     <div class="header">
     <!-- Top Navigation Menu -->
 
@@ -45,11 +44,22 @@
             </div>
 {#            <i class="fa fa-bars"></i>#}
             <ul id="myLinks">
-                <li id="register">Register</li>
-                <li><a href="/login">Login</a></li>
+                {% if session['user_name'] %}
+                    <li id="register" hidden>Register</li>
+                    <li id="login" hidden>Login</li>
+                    <a href="/logout">Logout</a>
+                {% else %}
+                    <li id="register">Register</li>
+                    <li id="login">Login</li>
+                {% endif %}
             </ul>
 
         <h1>ProMan</h1>
+        {% if session['user_name'] %}
+            <h2>Welcome {{ session['user_name'] }}</h2>
+        {% endif %}
+
+
     </div>
 
     <div id="boards">

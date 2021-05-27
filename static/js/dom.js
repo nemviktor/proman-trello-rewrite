@@ -228,7 +228,8 @@ export let dom = {
     modalCard: function (event) {
         let modal = document.getElementById('myModal_card');
         modal.style.display = "block";
-
+        // dom.closeModalX();
+        // dom.closeModalButton();
         let x = document.querySelector('.close-card');
         x.addEventListener('click', function () {
             modal.style.display = "none";
@@ -246,7 +247,8 @@ export let dom = {
     },
     modalColumn: function() {
         let modal = document.getElementById('myModal_col');
-
+        // dom.closeModalX();
+        // dom.closeModalButton();
         modal.style.display = "block";
         let x = document.querySelector('.close-status');
         x.addEventListener('click', function () {
@@ -439,8 +441,6 @@ export let dom = {
                     <p id="error" hidden>Username already exists, please choose another one!</p>
                     <div><label for="username">Username:</label></div>
                     <div><input type="text" id="username" name="username" required></div>
-                    <div><label for="email">E-mail:</label></div>
-                    <div><input type="email" id="email" name="email"  required></div>
                     <div><label for="password">Password:</label></div>
                     <div><input type="password" id="password" name="password" required></div>
                     <div><label for="password_2">Password again:</label></div>
@@ -460,7 +460,6 @@ export let dom = {
 
     submitRegistration: function (event) {
         let username = document.getElementById('username').value;
-        let email = document.getElementById('email').value;
         let password = document.getElementById('password').value;
         let error = document.getElementById("error");
         let registerDiv = document.querySelector('.registration-container');
@@ -472,7 +471,7 @@ export let dom = {
                 if (data) {
                     error.removeAttribute('hidden');
                 } else {
-                    const userData = {username: username, email: email, password: password};
+                    const userData = {username: username, password: password};
                     fetch('/registration', {
                         method: 'POST',
                         headers: {
@@ -491,7 +490,7 @@ export let dom = {
                                 <form id="login-form"> 
                                     <button id="login-button" class="btn btn-primary" type="submit">Login</button>
                                 </form>`;
-                            document.getElementById('login-button').addEventListener('click', login);
+                            document.getElementById('login-button').addEventListener('click', dom.initLogin);
                             })
                     }
             });
@@ -500,6 +499,59 @@ export let dom = {
     registration: function () {
         let registration = document.getElementById("register");
         registration.addEventListener('click', dom.initRegistration);
+    },
+
+    login: function () {
+        let login = document.getElementById("login");
+        login.addEventListener('click', dom.initLogin);
+    },
+    initLogin: function() {
+        modal.style.display = "block";
+        document.querySelector('.modal-title').innerText = "Login";
+        let modalBody = document.querySelector('.modal-body');
+        let htmlText =
+            `<div class="login-container">
+                <form id="login-form" > 
+                    <p id="error" hidden>Wrong username or password.</p>
+                    <p id="error-loggedIn" hidden>You are already logged in</p>
+                    <div><label for="username">Username:</label></div>
+                    <div><input type="text" id="username" name="username" required></div>
+                    <div><label for="password">Password:</label></div>
+                    <div><input type="password" id="password" name="password" required></div>
+                    <div><button id="confirm-button" class="btn btn-primary" type="submit">Confirm</button></div>
+                </form>
+            </div>`;
+        modalBody.innerHTML = htmlText;
+        dom.closeModalX()
+        dom.closeModalButton()
+
+        let form = document.getElementById('login-form')
+        form.onsubmit = dom.submitLogin;
+    },
+    submitLogin: function(event) {
+        event.preventDefault();
+        let error = document.getElementById("error");
+        let errorLoggedIn = document.getElementById("error-loggedIn");
+        let username = document.getElementById('username').value;
+        let password = document.getElementById('password').value;
+        let dataLogin = {username: username, password: password};
+        fetch('/check-login-data', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                },
+            body: JSON.stringify(dataLogin),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data == false) {
+                    error.removeAttribute('hidden');
+                } else if (data == true) {
+                    document.location.href="/";
+                } else if (data == "already") {
+                    errorLoggedIn.removeAttribute('hidden');
+                    }
+                })
     },
 
 

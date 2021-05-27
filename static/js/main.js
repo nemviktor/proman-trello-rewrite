@@ -10,6 +10,7 @@ function init() {
     hamburger_menu();
     animation();
     dom.registration();
+    dom.login();
 }
 
 window.onload = function() {

@@ -1,6 +1,7 @@
 ALTER TABLE IF EXISTS ONLY cards DROP CONSTRAINT IF EXISTS fk_card_board_id CASCADE;
 ALTER TABLE IF EXISTS ONLY cards DROP CONSTRAINT IF EXISTS fk_card_status_id CASCADE;
 ALTER TABLE IF EXISTS ONLY statuses DROP CONSTRAINT IF EXISTS fk_status_board_id CASCADE;
+ALTER TABLE IF EXISTS ONLY users DROP CONSTRAINT IF EXISTS fk_user_id CASCADE;
 
 DROP TABLE IF EXISTS boards;
 CREATE TABLE boards (
@@ -69,3 +70,6 @@ INSERT INTO cards (board_id, title, status_id, "order") VALUES (1, 'new cad 1', 
                          (2, 'planning', 3, 0),
                          (2, 'done card 1', 4, 0),
                          (2, 'done card 2', 4, 1);
+
+INSERT INTO users
+VALUES (1, 'Test', '$2b$12$NEEhTiRuJIPZVXPcGeCCguw3I8O9atD8s1oeLtisjef/8wTHtZIrS');

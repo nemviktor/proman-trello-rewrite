@@ -184,5 +184,41 @@ def delete_data_from_board_status(cursor: RealDictCursor, id):
     cursor.execute(query)
 
 
+@data_conection.connection_handler
+def list_usernames(cursor: RealDictCursor):
+    query = """
+        SELECT user_name
+        FROM users
+    """
+    cursor.execute(query)
+    return cursor.fetchall()
 
 
+@data_conection.connection_handler
+def save_user_data(cursor: RealDictCursor, username, hashed_password):
+    query = """
+        INSERT INTO users (user_name, password)
+        VALUES (%(username)s, %(hashed_password)s)
+        RETURNING id;
+    """
+    cursor.execute(query, {'username': username, 'hashed_password': hashed_password})
+
+
+@data_conection.connection_handler
+def get_user_password(cursor: RealDictCursor, username ):
+    query = """
+        select password from users
+        where user_name = %(username)s"""
+    cursor.execute(query, {'username': username})
+    return cursor.fetchone()
+
+
+@data_conection.connection_handler
+def get_user_id_by_username(cursor: RealDictCursor, username):
+    query = """
+        SELECT id
+        FROM users
+        WHERE user_name = %(username)s
+    """
+    cursor.execute(query, {'username': username})
+    return cursor.fetchone()
