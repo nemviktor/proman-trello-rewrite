@@ -97,13 +97,7 @@ export let dataHandler = {
     renameCard: function(data, callback){
         this._api_post(`./rename_card`, data,response => callback(response))
     },
-    addNewColumn: function(data,callback) {
-        this._api_post(`/add-new-column`, data, response => callback(response))
-    },
     deleteData: function(data, callback) {
         this._api_post(`/delete_data`, data, response => callback(response))
     },
-    // deleteCard: function(data, callback) {
-    //     this._api_post(`/delete_data`, data, response => callback(response))
-    // },
 };

@@ -122,9 +122,8 @@ section.board{
 
 .empty{
     position: relative;
-    background: white;
-    /*background: transparent;*/
-    color: #fff;
+    background: transparent;
+    color: transparent;
     border-radius: var(--border-radius);
     margin: 4px 0;
     padding: 4px;

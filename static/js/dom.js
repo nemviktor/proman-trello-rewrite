@@ -31,16 +31,19 @@ export let dom = {
         clone.querySelector('.card-add').setAttribute('data-board-id', board.id);
         clone.querySelector('.card-add').addEventListener('click', dom.modalCard)
         clone.querySelector('.board-status-add').setAttribute('add-status-board-id', board.id);
-        clone.querySelector('.board-status-add').addEventListener('click',dom.modalColumn)
+        clone.querySelector('.board-status-add').addEventListener('click',() => {
+            dom.modalColumn(board.id);
+        })
         clone.querySelector('.board-columns').id = board.id;
         clone.querySelector('.board-columns').setAttribute('data-id', board.id);
         clone.querySelector('.board-toggle').addEventListener('click', dom.boardToggle)
         boardContainer.appendChild(clone);
     },
     loadStatuses: function (boardId) {
-        dataHandler.getStatuses(boardId, function (boardId, statuses) {
+        Promise.all([dataHandler.getStatuses(boardId, function (boardId, statuses) {
             dom.showStatuses(boardId, statuses, dom.loadCards);
-        });
+        })])
+            .then(response => dom.checkStatusEmpty())
     },
     showStatuses: function (boardId, statuses, callback) {
         for (let status of statuses) {
@@ -74,8 +77,7 @@ export let dom = {
             dom.createCard(card);
             dom.renameCard(card.id, card.title, card.board_id)
         }
-        dom.checkStatusEmpty();
-        // dom.dragging();
+
     },
     createCard(card) {
         let cardContainers = document.querySelectorAll('.board-column-content');
@@ -113,18 +115,33 @@ export let dom = {
         let form = title_to_enable_rename.parentNode.children[1];
         form.classList.remove('hide')
         title_to_enable_rename.classList.add('hide')
-        let save = form.children[1]
-        save.addEventListener('click', () => {
+        // let save = form.children[1]
+        form.children[0].addEventListener('change', () => {
             let inputValue = form.children[0].value
             if (inputValue != '') {
                 let data = {
                     'id': form.id,
-                    'title': inputValue
-                }
-                dataHandler.renameBoard(data)
+                    'title': inputValue}
+                window.addEventListener('click', function() {
+                    dataHandler.renameBoard(data, console.log);
+                })
             }
         })
     },
+        // $('#menucontainer').click(function(event){
+        //   event.stopPropagation();
+        // });
+        // save.addEventListener('click', () => {
+        //     let inputValue = form.children[0].value
+        //     if (inputValue != '') {
+        //         let data = {
+        //             'id': form.id,
+        //             'title': inputValue
+        //         }
+        //         dataHandler.renameBoard(data)
+        //     }
+        // })
+    // },
     renameStatus: function (event) {
         let statusTitle = event.target;
         let form = statusTitle.parentNode.children[1];
@@ -207,14 +224,12 @@ export let dom = {
         })
     },
     displayNewCard: function (card) {
-        console.log(`displaycard ${card}`)
         dom.createCard(card);
     },
     handleNewCard: function (event) {
         event.preventDefault();
         let modal = document.getElementById('myModal_card');
         let cardTitle = event.currentTarget.previousElementSibling.previousElementSibling.value;
-        console.log(cardTitle)
         let boardId = parseInt(event.currentTarget.dataset.boardid);
         let statusId = 1;
         let orderId = 1;
@@ -240,7 +255,7 @@ export let dom = {
 
         submitCardButton.addEventListener('click', dom.handleNewCard)
     },
-    modalColumn: function() {
+    modalColumn: function(boardId) {
         let modal = document.getElementById('myModal_col');
 
         modal.style.display = "block";
@@ -258,7 +273,9 @@ export let dom = {
         submitStatusButton.addEventListener('click', () => {
             let statusTitle = document.getElementById('status_id').value;
             if (statusTitle !== null && statusTitle !== '') {
-                dataHandler.createNewStatus(statusTitle, dom.loadStatuses)
+                let data = {'title': statusTitle,
+                            'board': boardId}
+                dataHandler.createNewStatus(data, dom.loadStatuses)
             }
         })
     },
@@ -267,26 +284,6 @@ export let dom = {
         board.parentElement.remove();
         let data = { 'id' : board.id,
                  'table' : 'boards'
-    // addNewColumn: function (boardId) {
-    //     let new_status_name = prompt('Name of new status:');
-    //     let new_order = prompt('Order of the new status column');
-    //     let data = {
-    //         'status': {
-    //             'order_id': new_order,
-    //             'title': new_status_name
-    //         },
-    //         'boardID': boardId
-    //     };
-    //     dataHandler.addNewColumn(data, function () {
-    //         dom.loadStatuses(data.boardID);
-    //     })
-    // },
-    // deleteBoard: function (boardId) {
-    //     let boardSection = document.querySelector(`#board-${boardId}`)
-    //     boardSection.remove()
-    //     let data = {
-    //         'id': boardId,
-    //         'table': 'boards'
         }
         dataHandler.deleteData(data, response => console.log(response))
     },
@@ -298,7 +295,7 @@ export let dom = {
             'id': cardId,
             'table': 'cards'
         }
-        dataHandler.deleteData(data, response => console.log(response))
+        dataHandler.deleteData(data, dom.checkStatusEmpty)
     },
     switch: function () {
         let checkbox = document.getElementById('checkbox');
@@ -344,61 +341,11 @@ export let dom = {
         }
         card.addEventListener('dragend', () => {
             card.classList.remove('dragging');
-            console.log(card.parentNode.children[0])
             if (card.parentNode.children[0].classList.contains('empty')){
-                console.log(card.parentNode.children)
                 card.parentNode.removeChild(card.parentNode.children[0]);
             }
         })
     },
-
-    // dragging: function () {
-    //     let draggable_cards = document.querySelectorAll('.card');
-    //     for (let card of draggable_cards) {
-    //         card.addEventListener('dragstart', (event) => {
-    //             card.classList.add('dragging');
-    //             // dom.checkStatus();
-    //
-    //             // if (event.target.parentNode.childNodes.length == 3) {
-    //             //     let new_drop_neighbour = document.createElement('div');
-    //             //     new_drop_neighbour.classList.add('droppable');
-    //             //     new_drop_neighbour.innerHTML = "Drop something here!";
-    //             //     let container = event.target.parentNode;
-    //             //     container.appendChild(new_drop_neighbour);
-    //             // }
-    //
-    //             let droppables = document.querySelectorAll('.droppable');
-    //             for (let drop_neighbour of droppables) {
-    //                 drop_neighbour.addEventListener('dragover', (event) => {
-    //                     let dragged_element = document.querySelector('.dragging');
-    //                     if (event.target.classList.contains('droppable')) {
-    //                         drop_neighbour.insertAdjacentElement('afterend', dragged_element);
-    //                         dom.checkStatus()
-    //                     }
-    //                 })
-    //             }
-    //         })
-    //         card.addEventListener('dragend', () => {
-    //             card.classList.remove('dragging');
-    //             console.log(card.parentNode.children[0])
-    //             if (card.parentNode.children[0].classList.contains('empty')){
-    //                 console.log(card.parentNode.children)
-    //                 card.parentNode.removeChild(card.parentNode.children[0]);
-    //             }
-    //         })
-    //
-    //         let droppables = document.querySelectorAll('.droppable');
-    //         console.log(droppables)
-    //         for (let drop_neighbour of droppables) {
-    //             drop_neighbour.addEventListener('dragover',(event) => {
-    //                 let dragged_element = document.querySelector('.dragging');
-    //                 if (event.target.classList.contains('droppable')) {
-    //                     drop_neighbour.insertAdjacentElement('afterend',dragged_element);
-    //                 }
-    //             })
-    //         }
-    //     }
-    // },
     checkStatusEmpty: function(){
     let boardColumnContents = document.querySelectorAll('.board-column-content')
     for (let content of boardColumnContents){

@@ -11,7 +11,7 @@ CREATE TABLE boards (
 DROP TABLE IF EXISTS statuses;
 CREATE TABLE statuses (
     id serial NOT NULL PRIMARY KEY,
-    title text DEFAULT 'Undefined',
+    title text UNIQUE DEFAULT 'Undefined',
     order_id INTEGER NOT NULL
 );
 
