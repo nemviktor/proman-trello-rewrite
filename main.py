@@ -84,9 +84,8 @@ def create_new_card():
 @json_response
 def add_new_column():
     data = request.get_json()
-    id_response = data_handler.add_new_column(data, data['boardID'])
-    data['status']['id'] = id_response
-    return data
+    data_handler.add_new_column(data['title'], data['board'])
+    return data['board']
 
 
 @app.route("/delete_data", methods=['POST', 'GET'])
