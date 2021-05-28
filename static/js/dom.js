@@ -115,7 +115,7 @@ export let dom = {
         let form = title_to_enable_rename.parentNode.children[1];
         form.classList.remove('hide')
         title_to_enable_rename.classList.add('hide')
-        // let save = form.children[1]
+        let save = form.children[1]
         form.children[0].addEventListener('change', () => {
             let inputValue = form.children[0].value
             if (inputValue != '') {
@@ -123,25 +123,22 @@ export let dom = {
                     'id': form.id,
                     'title': inputValue}
                 window.addEventListener('click', function() {
+                    form.submit();
                     dataHandler.renameBoard(data, console.log);
                 })
             }
         })
+        save.addEventListener('click', () => {
+            let inputValue = form.children[0].value
+            if (inputValue != '') {
+                let data = {
+                    'id': form.id,
+                    'title': inputValue
+                }
+                dataHandler.renameBoard(data)
+            }
+        })
     },
-        // $('#menucontainer').click(function(event){
-        //   event.stopPropagation();
-        // });
-        // save.addEventListener('click', () => {
-        //     let inputValue = form.children[0].value
-        //     if (inputValue != '') {
-        //         let data = {
-        //             'id': form.id,
-        //             'title': inputValue
-        //         }
-        //         dataHandler.renameBoard(data)
-        //     }
-        // })
-    // },
     renameStatus: function (event) {
         let statusTitle = event.target;
         let form = statusTitle.parentNode.children[1];
@@ -161,6 +158,18 @@ export let dom = {
                     }
                     dataHandler.renameStatus(data)
                 }
+            }
+        })
+        window.addEventListener('click', function() {
+            let inputValue = form.children[0].value
+            if (inputValue != '') {
+                let data = {
+                    'id': form.id,
+                    'target_order': target_order,
+                    'board_id': _board_id,
+                    'title': inputValue};
+                form.submit();
+                dataHandler.renameStatus(data)
             }
         })
     },
@@ -189,6 +198,18 @@ export let dom = {
                                 }
                                 dataHandler.renameCard(data, response => console.log(response))
                             }
+                        }
+                    })
+                    window.addEventListener('click', function() {
+                        let inputValue = form.children[0].value
+                        if (inputValue != '') {
+                            let data = {
+                                'id': cardId,
+                                'board_id': boardId,
+                                'title': inputValue
+                            }
+                            form.submit();
+                            dataHandler.renameCard(data, response => console.log(response))
                         }
                     })
                 })
