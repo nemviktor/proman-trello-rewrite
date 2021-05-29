@@ -1,7 +1,7 @@
 import {dataHandler} from "./data_handler.js";
 
 let modal = document.getElementById("myModal");
-
+let modalBody = document.querySelector('.modal-body');
 
 
 export let dom = {
@@ -64,6 +64,7 @@ export let dom = {
         let template = document.querySelector('.status-template');
         let clone = template.content.cloneNode('true');
         clone.querySelector('.board-column').setAttribute('order', status.order_id);
+        clone.querySelector('.board-column').setAttribute('data-board-status-id', status.board_status_id);
         clone.querySelector('.board-column-title').id = `status-${status.id}`;
         clone.querySelector('.board-column-title').innerText = status.title;
         clone.querySelector('.board-column-title').addEventListener('click', dom.renameStatus)
@@ -245,9 +246,8 @@ export let dom = {
         });
     },
     modalPrivateBoard: function () {
-        modal.style.display = "block";
-        document.querySelector('.modal-title').innerText = "Add New Private Board";
-        let modalBody = document.querySelector('.modal-body');
+        dom.displayModal();
+        dom.setModalTitle("Add New Private Board");
         let htmlText =
             `<div class="registration-container">
                 <form id="form" > 
@@ -255,12 +255,9 @@ export let dom = {
                     <div><button id="confirm-button" class="btn btn-primary" type="submit">Confirm</button></div>
                 </form>
             </div>`;
-        modalBody.innerHTML = htmlText;
+        dom.setModalBodyInnerHTML(htmlText);
         dom.closeModalX();
         dom.closeModalButton();
-
-        // let form = document.getElementById('form')
-        // form.onsubmit = dom.submitPrivateBoard;
 
         let submitBoardButton = document.getElementById('confirm-button');
         submitBoardButton.addEventListener('click', () => {
@@ -270,28 +267,21 @@ export let dom = {
             }
         })
     },
-    // submitPrivateBoard: function (event) {
-    //     let boardTitle = document.querySelector('.input_board_title').value;
-    //     event.preventDefault();
-    //     if (boardTitle !== null && boardTitle !== '') {
-    //         dataHandler.createNewPrivateBoard(boardTitle, dom.loadStatuses)
-    //     }
-    // },
     modalBoard: function () {
-        let modal = document.getElementById('myModal_board');
+        dom.displayModal();
+        dom.setModalTitle("Add New Private Board");
+        let htmlText =
+            `<div class="registration-container">
+                <form id="form" > 
+                    <input class="input_board_title" type="text" placeholder="Board title" name="title" required>
+                    <div><button id="confirm-button" class="btn btn-primary" type="submit">Confirm</button></div>
+                </form>
+            </div>`;
+        dom.setModalBodyInnerHTML(htmlText);
+        dom.closeModalX();
+        dom.closeModalButton();
 
-        modal.style.display = "block";
-        let x = document.querySelector('.close-board');
-        x.addEventListener('click', function () {
-            modal.style.display = "none";
-        })
-
-        let closeButton = document.querySelector('.board-close-button');
-        closeButton.addEventListener('click', function () {
-            modal.style.display = "none";
-        })
-
-        let submitBoardButton = document.getElementById('submit-board');
+        let submitBoardButton = document.getElementById('confirm-button');
         submitBoardButton.addEventListener('click', () => {
             let boardTitle = document.querySelector('.input_board_title').value;
             if (boardTitle !== null && boardTitle !== '') {
@@ -304,48 +294,51 @@ export let dom = {
     },
     handleNewCard: function (event) {
         event.preventDefault();
-        let modal = document.getElementById('myModal_card');
+        //let modal = document.getElementById('myModal_card');
         let cardTitle = event.currentTarget.previousElementSibling.previousElementSibling.value;
         let boardId = parseInt(event.currentTarget.dataset.boardid);
         let statusId = 1;
         let orderId = 1;
-        modal.style.display = "none";
-        dataHandler.createNewCard(cardTitle, boardId, statusId, orderId, dom.displayNewCard)
+        let boardStatusId = parseInt(event.currentTarget.dataset.boardStatusid)
+       dom.hideModal();
+
+        dataHandler.createNewCard(cardTitle, boardId, statusId, orderId, boardStatusId, dom.displayNewCard)
     },
     modalCard: function (event) {
-        let modal = document.getElementById('myModal_card');
-        modal.style.display = "block";
-        // dom.closeModalX();
-        // dom.closeModalButton();
-        let x = document.querySelector('.close-card');
-        x.addEventListener('click', function () {
-            modal.style.display = "none";
-        })
-
-        let closeButton = document.querySelector('.card-close-button');
-        closeButton.addEventListener('click', function () {
-            modal.style.display = "none";
-        })
+        dom.displayModal();
+        dom.setModalTitle("Add New Card");
+        let htmlText =
+            `<div class="registration-container">
+                <form>
+                    <input type="text" placeholder="Card title" name="title" required>
+                    <br>
+                    <button id="submit-card" data-boardid="" data-board-statusid="">Submit</button>
+                </form>
+            </div>`;
+        dom.setModalBodyInnerHTML(htmlText);
+        dom.closeModalX();
+        dom.closeModalButton();
 
         let submitCardButton = document.getElementById('submit-card');
         submitCardButton.dataset.boardid = event.currentTarget.dataset.boardId;
+        submitCardButton.dataset.boardStatusid = event.currentTarget.parentElement.nextElementSibling.firstElementChild.dataset.boardStatusId;
 
         submitCardButton.addEventListener('click', dom.handleNewCard)
     },
     modalColumn: function(boardId) {
-        let modal = document.getElementById('myModal_col');
-        // dom.closeModalX();
-        // dom.closeModalButton();
-        modal.style.display = "block";
-        let x = document.querySelector('.close-status');
-        x.addEventListener('click', function () {
-            modal.style.display = "none";
-        })
-
-        let closeButton = document.querySelector('.status-close-button');
-        closeButton.addEventListener('click', function () {
-            modal.style.display = "none";
-        })
+        dom.displayModal();
+        dom.setModalTitle("Add Status");
+        let htmlText =
+            `<div class="registration-container">
+                <form>
+                    <input id="status_id" type="text" placeholder="Status title" name="title" required>
+                    <br>
+                    <button id="submit-status" data-boardid="">Submit</button>
+                </form>
+            </div>`;
+        dom.setModalBodyInnerHTML(htmlText);
+        dom.closeModalX();
+        dom.closeModalButton();
 
         let submitStatusButton = document.getElementById('submit-status');
         submitStatusButton.addEventListener('click', () => {
@@ -436,25 +429,33 @@ export let dom = {
             }
         }
     },
-
-
+    hideModal: function () {
+        modal.style.display = "none";
+    },
+    displayModal: function () {
+        modal.style.display = "block";
+    },
+    setModalTitle: function (title) {
+        document.querySelector('.modal-title').innerText = title;
+    },
+    setModalBodyInnerHTML: function (htmlText) {
+        modalBody.innerHTML = htmlText;
+    },
     closeModalX: function (){
         let closeX = document.querySelector('.close');
         closeX.addEventListener('click', function() {
-            modal.style.display = "none";
+            dom.hideModal();
         })
     },
     closeModalButton: function () {
         let closeButton = document.getElementById('close-button');
         closeButton.addEventListener('click', function () {
-            modal.style.display = "none";
+            dom.hideModal();
         })
     },
-
     initRegistration: function() {
-        modal.style.display = "block";
-        document.querySelector('.modal-title').innerText = "Registration";
-        let modalBody = document.querySelector('.modal-body');
+        dom.displayModal();
+        dom.setModalTitle("Registration");
         let htmlText =
             `<div class="registration-container">
                 <form id="form" > 
@@ -469,15 +470,13 @@ export let dom = {
                     <div><button id="confirm-button" class="btn btn-primary" type="submit">Confirm</button></div>
                 </form>
             </div>`;
-        modalBody.innerHTML = htmlText;
-
+        dom.setModalBodyInnerHTML(htmlText);
         dom.closeModalX();
         dom.closeModalButton();
 
         let form = document.getElementById('form')
         form.onsubmit = dom.submitRegistration;
     },
-
     submitRegistration: function (event) {
         let username = document.getElementById('username').value;
         let password = document.getElementById('password').value;
@@ -520,15 +519,13 @@ export let dom = {
         let registration = document.getElementById("register");
         registration.addEventListener('click', dom.initRegistration);
     },
-
     login: function () {
         let login = document.getElementById("login");
         login.addEventListener('click', dom.initLogin);
     },
     initLogin: function() {
-        modal.style.display = "block";
-        document.querySelector('.modal-title').innerText = "Login";
-        let modalBody = document.querySelector('.modal-body');
+        dom.displayModal();
+        dom.setModalTitle("Login");
         let htmlText =
             `<div class="login-container">
                 <form id="login-form" > 
@@ -541,7 +538,7 @@ export let dom = {
                     <div><button id="confirm-button" class="btn btn-primary" type="submit">Confirm</button></div>
                 </form>
             </div>`;
-        modalBody.innerHTML = htmlText;
+        dom.setModalBodyInnerHTML(htmlText);
         dom.closeModalX()
         dom.closeModalButton()
 

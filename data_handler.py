@@ -107,10 +107,10 @@ def create_new_private_board(cursor: RealDictCursor, boardTitle, owner):
 
 
 @data_conection.connection_handler
-def create_new_card(cursor: RealDictCursor, cardTitle, boardId, statusId):
+def create_new_card(cursor: RealDictCursor, cardTitle, boardId, statusId, boardStatusId):
     query = f"""
-            INSERT INTO cards (board_id, title, status_id)
-            VALUES ('{boardId}', '{cardTitle}', '{statusId}');"""
+            INSERT INTO cards (board_id, title, status_id, board_statuses_id)
+            VALUES ('{boardId}', '{cardTitle}', '{statusId}', '{boardStatusId}');"""
     cursor.execute(query)
     return
 
@@ -230,3 +230,4 @@ def get_user_id_by_username(cursor: RealDictCursor, username):
     """
     cursor.execute(query, {'username': username})
     return cursor.fetchone()
+

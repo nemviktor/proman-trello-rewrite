@@ -99,7 +99,8 @@ def create_new_card():
     cardTitle = dataset['title']
     boardId = dataset['brdid']
     statusId = dataset['status']
-    data_handler.create_new_card(cardTitle, boardId, statusId)
+    boardStatusId = dataset['boardStatusId']
+    data_handler.create_new_card(cardTitle, boardId, statusId, boardStatusId)
     data = data_handler.last_card('cards', 'title', cardTitle)
     return data
 
@@ -182,7 +183,6 @@ def check_login_data():
 def logout():
     session.clear()
     return redirect('/')
-
 
 
 

@@ -84,8 +84,8 @@ export let dataHandler = {
         // creates new board, saves it and calls the callback function with its data
         this._api_post(`./create_new_private_board`, data,response => callback(response))
     },
-    createNewCard: function (cardTitle, boardId, statusId, orderId, callback) {
-        let data = {'title': cardTitle, 'brdid': boardId, 'status': statusId, 'orderid': orderId}
+    createNewCard: function (cardTitle, boardId, statusId, orderId, boardStatusId, callback) {
+        let data = {'title': cardTitle, 'brdid': boardId, 'status': statusId, 'orderid': orderId, 'boardStatusId': boardStatusId}
         this._api_post(`./create_new_card`, data, response => callback(response))
         // creates new card, saves it and calls the callback function with its data
     },
