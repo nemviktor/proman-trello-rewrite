@@ -104,4 +104,7 @@ export let dataHandler = {
     deleteData: function(data, callback) {
         this._api_post(`/delete_data`, data, response => callback(response))
     },
+    deleteStatus: function(data) {
+        fetch(`/delete-status/${data}`)
+    },
 };

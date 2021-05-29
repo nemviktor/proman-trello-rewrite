@@ -24,7 +24,8 @@ CREATE TABLE cards (
     board_id integer NOT NULL,
     title text DEFAULT 'Undefined',
     status_id integer NOT NULL,
-    "order" serial NOT NULL
+    "order" serial NOT NULL,
+    board_statuses_id integer not null
 );
 
 DROP TABLE IF EXISTS board_statuses;
@@ -53,7 +54,8 @@ ALTER TABLE session
     ADD CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE;
 
 
-
+ALTER TABLE cards
+ADD CONSTRAINT fk_board_statuses_id FOREIGN KEY (board_statuses_id) REFERENCES board_statuses(id) ON DELETE CASCADE;
 
 
 INSERT INTO board_statuses (board_id, status_id, status_order)
@@ -63,20 +65,20 @@ INSERT INTO boards (title, owner) VALUES ('Board 1', 0), ('Board 2', 0), ('Board
 
 INSERT INTO statuses (title, order_id) VALUES ('new',1), ('in progress',2),  ('testing',3) ,('done',4);
 
-INSERT INTO cards (board_id, title, status_id, "order") VALUES (1, 'new cad 1', 1, 0),
-                         (1, 'new card 2', 1, 1),
-                         (1, 'in progress card', 2, 0),
-                         (1, 'planning', 3, 0),
-                         (1, 'done card 1', 4, 0),
-                         (1, 'done card 2', 4, 1),
-                         (2, 'new card 1', 1, 0),
-                         (2, 'new card 2', 1, 1),
-                         (2, 'in progress card', 2, 0),
-                         (2, 'planning', 3, 0),
-                         (2, 'done card 1', 4, 0),
-                         (2, 'done card 2', 4, 1),
-                         (3, 'new card', 1, 0),
-                         (4, 'new card', 1, 0);
+INSERT INTO cards (board_id, title, status_id, "order", board_statuses_id) VALUES (1, 'new cad 1', 1, 0, 1),
+                         (1, 'new card 2', 1, 1, 1),
+                         (1, 'in progress card', 2, 0, 2),
+                         (1, 'planning', 3, 0, 3),
+                         (1, 'done card 1', 4, 0, 4),
+                         (1, 'done card 2', 4, 1, 4),
+                         (2, 'new card 1', 1, 0, 5),
+                         (2, 'new card 2', 1, 1, 5),
+                         (2, 'in progress card', 2, 0, 2),
+                         (2, 'planning', 3, 0, 7),
+                         (2, 'done card 1', 4, 0, 8),
+                         (2, 'done card 2', 4, 1, 8),
+                         (3, 'new card', 1, 0, 9),
+                         (4, 'new card', 1, 0, 13);
 
 
 

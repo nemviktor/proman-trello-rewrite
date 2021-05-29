@@ -71,7 +71,6 @@ def rename_card():
     return response
 
 
-
 @app.route("/create_new_board", methods=['POST', 'GET'])
 @json_response
 def create_new_board():
@@ -121,6 +120,11 @@ def delete_data():
     if data['table'] == 'boards':
         data_handler.delete_data_from_board_status(data['id'])
     return f'delete: {data}'
+
+
+@app.route("/delete-status/<int:id>", methods=['POST', 'GET'])
+def delete_status(id):
+    return data_handler.delete_status(id)
 
 
 @app.route("/registration", methods=["GET", "POST"])

@@ -9,7 +9,6 @@ export let dom = {
     },
     loadBoards: function () {
         dataHandler.getBoards(function (boards) {
-            console.log(boards);
             dom.showBoards(boards, dom.loadStatuses);
         });
     },
@@ -74,7 +73,15 @@ export let dom = {
         clone.querySelector('.board-column-content').setAttribute('data-order', status.order_id);
         clone.querySelector('.board-column-content').setAttribute('status-title', status.title);
         clone.querySelector('.board-column-content').setAttribute('data-status-id', status.id);
+        clone.querySelector('.status-remove').setAttribute('id', status.id);
+        clone.querySelector('.status-remove').setAttribute('data-board-status-id', status.board_status_id);
+        clone.querySelector('.status-remove').addEventListener('click',dom.deleteStatus);
         boardColumn.appendChild(clone);
+    },
+    deleteStatus:function (event) {
+        let id = parseInt(event.currentTarget.dataset.boardStatusId);
+        dataHandler.deleteStatus(id);
+        event.currentTarget.parentElement.parentElement.remove();
     },
     loadCards: function (boardId) {
         dataHandler.getCardsByBoardId(boardId, function (cards) {

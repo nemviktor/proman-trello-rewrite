@@ -6,7 +6,7 @@ from psycopg2.extras import RealDictCursor
 @data_conection.connection_handler
 def get_statuses_from_table(cursor: RealDictCursor, table1, table2, boardid) -> list:
     query = '''
-    SELECT {0}.id, {0}.title, {0}.order_id
+    SELECT {0}.id, {0}.title, {0}.order_id, {1}.id as board_status_id
     FROM {0}
     JOIN {1} ON {0}.id = {1}.status_id
     WHERE {1}.board_id = {2}
@@ -99,7 +99,6 @@ def create_new_board(cursor: RealDictCursor, boardTitle):
 
 @data_conection.connection_handler
 def create_new_private_board(cursor: RealDictCursor, boardTitle, owner):
-    print(owner)
     query = f"""
             INSERT INTO boards (title, owner)
             VALUES ('{boardTitle}', %(owner)s);"""
@@ -174,6 +173,16 @@ def delete_data(cursor: RealDictCursor, id:int, table: str) -> list :
                     WHERE id =%(id)s;
                     ''').format(table=sql.Identifier(f'{table}'))
     cursor.execute(query, {'table': table, 'id': id})
+
+
+@data_conection.connection_handler
+def delete_status(cursor: RealDictCursor, id:int):
+    query = """
+        DELETE FROM board_statuses
+        WHERE id = %(id)s
+    """
+    cursor.execute(query, {'id': id})
+    return ''
 
 
 @data_conection.connection_handler
