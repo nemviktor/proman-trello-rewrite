@@ -9,6 +9,7 @@ export let dom = {
     },
     loadBoards: function () {
         dataHandler.getBoards(function (boards) {
+            console.log(boards);
             dom.showBoards(boards, dom.loadStatuses);
         });
     },

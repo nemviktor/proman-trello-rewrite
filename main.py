@@ -21,6 +21,10 @@ def index():
 @app.route("/get-boards")
 @json_response
 def get_boards():
+    boards = data_handler.get_data_on_boards('boards')
+    boards_filtered = []
+    for board in boards:
+        print(board['id'])
     return data_handler.get_data_on_boards('boards')
 
 

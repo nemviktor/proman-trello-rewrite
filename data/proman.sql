@@ -6,7 +6,8 @@ ALTER TABLE IF EXISTS ONLY users DROP CONSTRAINT IF EXISTS fk_user_id CASCADE;
 DROP TABLE IF EXISTS boards;
 CREATE TABLE boards (
     id serial NOT NULL PRIMARY KEY,
-    title text DEFAULT 'Undefined'
+    title text DEFAULT 'Undefined',
+    user_id integer
 );
 
 DROP TABLE IF EXISTS statuses;
@@ -50,11 +51,15 @@ CREATE TABLE session (
 ALTER TABLE session
     ADD CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE;
 
+ALTER TABLE ONLY boards
+    ADD CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ;
+
+
 
 INSERT INTO board_statuses (board_id, status_id, status_order)
             VALUES (1,1,1),(1,2,2),(1,3,3),(1,4,4),(2,1,1),(2,2,2),(2,3,3),(2,4,4);
 
-INSERT INTO boards (title) VALUES ('Board 1'), ('Board 2');
+INSERT INTO boards (title, user_id) VALUES ('Board 1'), ('Board 2', 2);
 
 INSERT INTO statuses (title, order_id) VALUES ('new',1), ('in progress',2),  ('testing',3) ,('done',4);
 
