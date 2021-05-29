@@ -8,6 +8,8 @@ function init() {
     dom.switch();
     dom.addNewBoard();
     animation();
+    dom.registration();
+    dom.login();
 }
 
 window.onload = function() {

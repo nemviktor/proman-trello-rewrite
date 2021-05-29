@@ -47,9 +47,22 @@
             <ul id="myLinks">
                 <li id="mylink1"><a href="/register">Register</a></li>
                 <li id="mylink2"><a href="/login">Login</a></li>
+                {% if session['user_name'] %}
+                    <li id="register" hidden>Register</li>
+                    <li id="login" hidden>Login</li>
+                    <a href="/logout">Logout</a>
+                {% else %}
+                    <li id="register">Register</li>
+                    <li id="login">Login</li>
+                {% endif %}
             </ul>
 
         <h1>ProMan</h1>
+        {% if session['user_name'] %}
+            <h2>Welcome {{ session['user_name'] }}</h2>
+        {% endif %}
+
+
     </div>
 
     <div id="boards">
@@ -69,6 +82,25 @@
         <div class="board-container"></div>
     </div>
 
+<!-- Base modal -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            <div class="modal-body">
+                {% for category, message in get_flashed_messages(with_categories=True) %}
+                                <div class="alert-{{category}}">{{ message }}</div>
+                        {% endfor %}
+                </div>
+            <div class="modal-footer">
+                <button id="close-button" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+        </div>
+    </div>
 
     <!-- Modal for (new card) inputs -->
     <div id="myModal_card" class="modal">

@@ -1,10 +1,15 @@
 import {dataHandler} from "./data_handler.js";
 
+let modal = document.getElementById("myModal");
+
+
+
 export let dom = {
     init: function () {
     },
     loadBoards: function () {
         dataHandler.getBoards(function (boards) {
+            console.log(boards);
             dom.showBoards(boards, dom.loadStatuses);
         });
     },
@@ -260,7 +265,8 @@ export let dom = {
     modalCard: function (event) {
         let modal = document.getElementById('myModal_card');
         modal.style.display = "block";
-
+        // dom.closeModalX();
+        // dom.closeModalButton();
         let x = document.querySelector('.close-card');
         x.addEventListener('click', function () {
             modal.style.display = "none";
@@ -278,7 +284,8 @@ export let dom = {
     },
     modalColumn: function(boardId) {
         let modal = document.getElementById('myModal_col');
-
+        // dom.closeModalX();
+        // dom.closeModalButton();
         modal.style.display = "block";
         let x = document.querySelector('.close-status');
         x.addEventListener('click', function () {
@@ -379,5 +386,145 @@ export let dom = {
             }
         }
     },
+
+
+    closeModalX: function (){
+        let closeX = document.querySelector('.close');
+        closeX.addEventListener('click', function() {
+            modal.style.display = "none";
+        })
+    },
+    closeModalButton: function () {
+        let closeButton = document.getElementById('close-button');
+        closeButton.addEventListener('click', function () {
+            modal.style.display = "none";
+        })
+    },
+
+    initRegistration: function() {
+        modal.style.display = "block";
+        document.querySelector('.modal-title').innerText = "Registration";
+        let modalBody = document.querySelector('.modal-body');
+        let htmlText =
+            `<div class="registration-container">
+                <form id="form" > 
+                    <p id="error" hidden>Username already exists, please choose another one!</p>
+                    <div><label for="username">Username:</label></div>
+                    <div><input type="text" id="username" name="username" required></div>
+                    <div><label for="password">Password:</label></div>
+                    <div><input type="password" id="password" name="password" required></div>
+                    <div><label for="password_2">Password again:</label></div>
+                    <div><input type="password" id="password_2" name="password_2" required></div>
+                        
+                    <div><button id="confirm-button" class="btn btn-primary" type="submit">Confirm</button></div>
+                </form>
+            </div>`;
+        modalBody.innerHTML = htmlText;
+
+        dom.closeModalX();
+        dom.closeModalButton();
+
+        let form = document.getElementById('form')
+        form.onsubmit = dom.submitRegistration;
+    },
+
+    submitRegistration: function (event) {
+        let username = document.getElementById('username').value;
+        let password = document.getElementById('password').value;
+        let error = document.getElementById("error");
+        let registerDiv = document.querySelector('.registration-container');
+        let modalBody = document.querySelector('.modal-body');
+        event.preventDefault();
+        fetch('/check-username/' + username)
+            .then(resp => resp.json())
+            .then(data => {
+                if (data) {
+                    error.removeAttribute('hidden');
+                } else {
+                    const userData = {username: username, password: password};
+                    fetch('/registration', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(userData),
+                        })
+                        .then(resp => resp.json())
+                        .then(data => console.log(data))
+                        .then(function (){
+                            error.setAttribute('hidden', '');
+                            registerDiv.remove();
+
+                            modalBody.innerHTML =
+                                `<p>Successful registration. Log in to continue.</p>
+                                <form id="login-form"> 
+                                    <button id="login-button" class="btn btn-primary" type="submit">Login</button>
+                                </form>`;
+                            document.getElementById('login-button').addEventListener('click', dom.initLogin);
+                            })
+                    }
+            });
+
+    },
+    registration: function () {
+        let registration = document.getElementById("register");
+        registration.addEventListener('click', dom.initRegistration);
+    },
+
+    login: function () {
+        let login = document.getElementById("login");
+        login.addEventListener('click', dom.initLogin);
+    },
+    initLogin: function() {
+        modal.style.display = "block";
+        document.querySelector('.modal-title').innerText = "Login";
+        let modalBody = document.querySelector('.modal-body');
+        let htmlText =
+            `<div class="login-container">
+                <form id="login-form" > 
+                    <p id="error" hidden>Wrong username or password.</p>
+                    <p id="error-loggedIn" hidden>You are already logged in</p>
+                    <div><label for="username">Username:</label></div>
+                    <div><input type="text" id="username" name="username" required></div>
+                    <div><label for="password">Password:</label></div>
+                    <div><input type="password" id="password" name="password" required></div>
+                    <div><button id="confirm-button" class="btn btn-primary" type="submit">Confirm</button></div>
+                </form>
+            </div>`;
+        modalBody.innerHTML = htmlText;
+        dom.closeModalX()
+        dom.closeModalButton()
+
+        let form = document.getElementById('login-form')
+        form.onsubmit = dom.submitLogin;
+    },
+    submitLogin: function(event) {
+        event.preventDefault();
+        let error = document.getElementById("error");
+        let errorLoggedIn = document.getElementById("error-loggedIn");
+        let username = document.getElementById('username').value;
+        let password = document.getElementById('password').value;
+        let dataLogin = {username: username, password: password};
+        fetch('/check-login-data', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                },
+            body: JSON.stringify(dataLogin),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data == false) {
+                    error.removeAttribute('hidden');
+                } else if (data == true) {
+                    document.location.href="/";
+                } else if (data == "already") {
+                    errorLoggedIn.removeAttribute('hidden');
+                    }
+                })
+    },
+
+
+
 }
 

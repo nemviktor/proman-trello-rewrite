@@ -1,10 +1,14 @@
-from flask import Flask, render_template, url_for, request, redirect, make_response, jsonify
+import os
+
+from flask import json, Flask, render_template, url_for, request, redirect, make_response, jsonify, session
+
+import hash_password
 from util import json_response
 
 import data_handler
 
 app = Flask(__name__)
-
+app.secret_key = os.environ.get('secret_key')
 
 @app.route("/")
 def index():
@@ -17,6 +21,10 @@ def index():
 @app.route("/get-boards")
 @json_response
 def get_boards():
+    boards = data_handler.get_data_on_boards('boards')
+    boards_filtered = []
+    for board in boards:
+        print(board['id'])
     return data_handler.get_data_on_boards('boards')
 
 
@@ -96,6 +104,66 @@ def delete_data():
     if data['table'] == 'boards':
         data_handler.delete_data_from_board_status(data['id'])
     return f'delete: {data}'
+
+
+@app.route("/registration", methods=["GET", "POST"])
+def registration():
+    data = request.data
+    data_decode = data.decode('UTF-8')
+    data_decode_dict = json.loads(data_decode)
+
+    # email = data_decode_dict["email"]
+    username = data_decode_dict['username']
+    password = data_decode_dict['password']
+
+    hashed_password = hash_password.hash_password(password)
+    data_handler.save_user_data(username, hashed_password)
+    return jsonify("successful registration")
+
+
+@app.route('/check-username/<username>', methods=["GET", "POST"])
+def check_username(username):
+    result = jsonify(False)
+    usernames = data_handler.list_usernames()
+    for element in usernames:
+        if element['user_name'] == username:
+            result = jsonify(True)
+    return result
+
+
+@app.route('/check-login-data', methods=['GET', 'POST'])
+def check_login_data():
+    data = request.data
+    data_decode = data.decode('UTF-8')
+    data_decode_dict = json.loads(data_decode)
+
+    username = data_decode_dict['username']
+    plain_text_password = data_decode_dict['password']
+
+    if 'username' not in session:
+        session.clear()
+        session.permanent = True
+        hashed_password = data_handler.get_user_password(username)
+        if hashed_password is None:
+            print('invalid')
+            result = jsonify(False)
+            return result
+        elif hash_password.verify_password(plain_text_password, hashed_password['password']):
+            session['user_name'] = username
+            session['user_id'] = data_handler.get_user_id_by_username(username)['id']
+            result = jsonify(True)
+            return result
+    else:
+        result = jsonify("already")
+        return result
+
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect('/')
+
+
 
 
 def main():
