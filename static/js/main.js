@@ -7,6 +7,7 @@ function init() {
     dom.loadBoards();
     dom.switch();
     dom.addNewBoard();
+    dom.addNewPrivateBoard();
     animation();
     dom.registration();
     dom.login();

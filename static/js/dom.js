@@ -28,7 +28,11 @@ export let dom = {
         clone.querySelector('.board').id = board.id;
         clone.querySelector('.board-header').id = board.id;
         clone.querySelector('.board-title').id = `title ${board.id}`;
-        clone.querySelector('.board-title').innerText = board.title;
+        if (board.owner !== 0) {
+            clone.querySelector('.board-title').innerText = board.title + " (private)";
+        } else {
+            clone.querySelector('.board-title').innerText = board.title + " (public)";
+        }
         clone.querySelector('.board-title').addEventListener('click', dom.renameBoard)
         clone.querySelector('.board-form').id = board.id;
         clone.querySelector('.board-remove').setAttribute('delete-board-id', board.id);
@@ -227,6 +231,45 @@ export let dom = {
             dom.modalBoard();
         });
     },
+    addNewPrivateBoard: function () {
+        let add_new_private_board_button = document.querySelector('#new-private-board');
+        add_new_private_board_button.addEventListener('click', function() {
+            dom.modalPrivateBoard();
+        });
+    },
+    modalPrivateBoard: function () {
+        modal.style.display = "block";
+        document.querySelector('.modal-title').innerText = "Add New Private Board";
+        let modalBody = document.querySelector('.modal-body');
+        let htmlText =
+            `<div class="registration-container">
+                <form id="form" > 
+                    <input class="input_board_title" type="text" placeholder="Board title" name="title" required>
+                    <div><button id="confirm-button" class="btn btn-primary" type="submit">Confirm</button></div>
+                </form>
+            </div>`;
+        modalBody.innerHTML = htmlText;
+        dom.closeModalX();
+        dom.closeModalButton();
+
+        // let form = document.getElementById('form')
+        // form.onsubmit = dom.submitPrivateBoard;
+
+        let submitBoardButton = document.getElementById('confirm-button');
+        submitBoardButton.addEventListener('click', () => {
+            let boardTitle = document.querySelector('.input_board_title').value;
+            if (boardTitle !== null && boardTitle !== '') {
+                dataHandler.createNewPrivateBoard(boardTitle, dom.loadStatuses)
+            }
+        })
+    },
+    // submitPrivateBoard: function (event) {
+    //     let boardTitle = document.querySelector('.input_board_title').value;
+    //     event.preventDefault();
+    //     if (boardTitle !== null && boardTitle !== '') {
+    //         dataHandler.createNewPrivateBoard(boardTitle, dom.loadStatuses)
+    //     }
+    // },
     modalBoard: function () {
         let modal = document.getElementById('myModal_board');
 

@@ -46,8 +46,8 @@
 {#            <i class="fa fa-bars"></i>#}
             <ul id="myLinks">
                 {% if session['user_name'] %}
-                    <li id="register" hidden>Register</li>
-                    <li id="login" hidden>Login</li>
+                    <li hidden id="register">Register</li>
+                    <li hidden id="login" >Login</li>
                     <li><a href="/logout">Logout</a></li>
                 {% else %}
                     <li id="register">Register</li>
@@ -66,7 +66,13 @@
     <div id="boards">
 
         <!-- New board button & theme changer-->
-        <button type="button" id="new-board">Create new board</button>
+        {% if session['user_name'] %}
+            <button type="button" id="new-board">Create new public board</button>
+            <button type="button" id="new-private-board">Create new private board</button>
+        {% else %}
+            <button type="button" id="new-board">Create new public board</button>
+            <button type="button" id="new-private-board" hidden>Create new private board</button>
+        {% endif %}
         <div class="switcher">
             <input data-theme="light" type="checkbox" class="checkbox" id="checkbox">
             <label for="checkbox" class="label">

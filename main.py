@@ -23,9 +23,15 @@ def index():
 def get_boards():
     boards = data_handler.get_data_on_boards('boards')
     boards_filtered = []
-    for board in boards:
-        print(board['id'])
-    return data_handler.get_data_on_boards('boards')
+    if 'user_id' in session:
+        for board in boards:
+            if board['owner'] == 0 or board['owner'] == session['user_id']:
+                boards_filtered.append(board)
+    else:
+        for board in boards:
+            if board['owner'] == 0:
+                boards_filtered.append(board)
+    return boards_filtered
 
 
 @app.route("/get-cards/<int:board_id>")
@@ -71,6 +77,17 @@ def rename_card():
 def create_new_board():
     boardTitle = request.get_json()
     data_handler.create_new_board(boardTitle)
+    data = data_handler.last_id('boards', 'title', boardTitle)
+    data_handler.add_default_statuses_to_board(data['id'])
+    return data['id']
+
+
+@app.route("/create_new_private_board", methods=['POST', 'GET'])
+@json_response
+def create_new_private_board():
+    boardTitle = request.get_json()
+    owner = session['user_id']
+    data_handler.create_new_private_board(boardTitle, owner)
     data = data_handler.last_id('boards', 'title', boardTitle)
     data_handler.add_default_statuses_to_board(data['id'])
     return data['id']
@@ -145,7 +162,6 @@ def check_login_data():
         session.permanent = True
         hashed_password = data_handler.get_user_password(username)
         if hashed_password is None:
-            print('invalid')
             result = jsonify(False)
             return result
         elif hash_password.verify_password(plain_text_password, hashed_password['password']):

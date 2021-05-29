@@ -91,9 +91,19 @@ def rename_status(cursor: RealDictCursor, statusid, new_name, target_board, targ
 @data_conection.connection_handler
 def create_new_board(cursor: RealDictCursor, boardTitle):
     query = f"""
-            INSERT INTO boards (title)
-            VALUES ('{boardTitle}');"""
+            INSERT INTO boards (title, owner)
+            VALUES ('{boardTitle}', 0);"""
     cursor.execute(query)
+    return
+
+
+@data_conection.connection_handler
+def create_new_private_board(cursor: RealDictCursor, boardTitle, owner):
+    print(owner)
+    query = f"""
+            INSERT INTO boards (title, owner)
+            VALUES ('{boardTitle}', %(owner)s);"""
+    cursor.execute(query, {'owner': owner})
     return
 
 
