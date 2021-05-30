@@ -56,7 +56,7 @@ h1 {
 }
 
 #myLinks li{
-  display: inline-block;
+  float: left;
   padding: 10px;
   border-bottom-left-radius: 70%;  /* 100px of height + 10px of border */
   border-bottom-right-radius: 70%; /* 100px of height + 10px of border */

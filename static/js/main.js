@@ -11,6 +11,7 @@ function init() {
     animation();
     dom.registration();
     dom.login();
+    dom.logout();
 }
 
 window.onload = function() {

@@ -182,7 +182,7 @@ def check_login_data():
 @app.route('/logout')
 def logout():
     session.clear()
-    return redirect('/')
+    return render_template('index.html')
 
 
 

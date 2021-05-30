@@ -294,13 +294,12 @@ export let dom = {
     },
     handleNewCard: function (event) {
         event.preventDefault();
-        //let modal = document.getElementById('myModal_card');
         let cardTitle = event.currentTarget.previousElementSibling.previousElementSibling.value;
         let boardId = parseInt(event.currentTarget.dataset.boardid);
         let statusId = 1;
         let orderId = 1;
         let boardStatusId = parseInt(event.currentTarget.dataset.boardStatusid)
-       dom.hideModal();
+        dom.hideModal();
 
         dataHandler.createNewCard(cardTitle, boardId, statusId, orderId, boardStatusId, dom.displayNewCard)
     },
@@ -564,12 +563,26 @@ export let dom = {
                 if (data == false) {
                     error.removeAttribute('hidden');
                 } else if (data == true) {
+                    console.log(document.getElementById("login"));
+                    document.getElementById("login").style.display = "none";
+                    document.getElementById("register").style.display = "none";
                     document.location.href="/";
                 } else if (data == "already") {
                     errorLoggedIn.removeAttribute('hidden');
                     }
                 })
     },
+    logout: function () {
+        document.getElementById("logout").addEventListener('click', function () {
+            document.getElementById("logout").style.display = "none";
+            fetch('/logout')
+        })
+    },
+    initMenu: function () {
+        if ('user_id' in Session) {
+
+        }
+    }
 
 
 
