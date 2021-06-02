@@ -44,6 +44,7 @@ export let dom = {
         })
         clone.querySelector('.board-columns').id = board.id;
         clone.querySelector('.board-columns').setAttribute('data-id', board.id);
+
         clone.querySelector('.board-toggle').addEventListener('click', dom.boardToggle)
         boardContainer.appendChild(clone);
     },
@@ -65,6 +66,9 @@ export let dom = {
         let clone = template.content.cloneNode('true');
         clone.querySelector('.board-column').setAttribute('order', status.order_id);
         clone.querySelector('.board-column').setAttribute('data-board-status-id', status.board_status_id);
+        clone.querySelector('.board-column').setAttribute('draggable', 'true');
+        clone.querySelector('.board-column').addEventListener('dragstart', dom.dragging_status);
+
         clone.querySelector('.board-column-title').id = `status-${status.id}`;
         clone.querySelector('.board-column-title').innerText = status.title;
         clone.querySelector('.board-column-title').addEventListener('click', dom.renameStatus)
@@ -104,7 +108,7 @@ export let dom = {
         clone.querySelector('.card').setAttribute('card-order', `${card.order}`);
         clone.querySelector('.card').id = `${card.id}`;
         clone.querySelector('.card').setAttribute('data_status', `${card.status_id}`);
-        clone.querySelector('.card').addEventListener('dragstart', dom.dragging)
+        clone.querySelector('.card').addEventListener('dragstart', dom.dragging_card);
         clone.querySelector('.card-remove').id = `${card.id}`;
         clone.querySelector('.card-remove').addEventListener('click',dom.deleteCard);
         clone.querySelector('.card-title').id = `${card.id}`;
@@ -396,14 +400,14 @@ export let dom = {
         }
         localStorage.setItem('style', theme)
     },
-    dragging: function (event) {
+    dragging_card: function (event) {
         let card = event.currentTarget;
         card.classList.add('dragging');
         let droppables = document.querySelectorAll('.droppable');
         for (let drop_neighbour of droppables) {
             drop_neighbour.addEventListener('dragover', (event) => {
                 let dragged_element = document.querySelector('.dragging');
-                if (event.target.classList.contains('droppable')) {
+                if (event.target.classList.contains('droppable') && event.target.classList.contains('card')) {
                     drop_neighbour.insertAdjacentElement('afterend', dragged_element);
                     dom.checkStatusEmpty()
                 }
@@ -411,15 +415,35 @@ export let dom = {
         }
         card.addEventListener('dragend', () => {
             card.classList.remove('dragging');
-            if (card.parentNode.children[0].classList.contains('empty')){
-                card.parentNode.removeChild(card.parentNode.children[0]);
+            if (card.parentNode.children[1].classList.contains('empty')) {
+                card.parentNode.removeChild(card.parentNode.children[1]);
             }
+        })
+    },
+    dragging_status: function(event){
+        //status column drag and drop
+        let current_status = event.currentTarget;
+        current_status.classList.add('dragging');
+        let status_dropzones = document.querySelectorAll('.dropzone');
+        for (let drop_target of status_dropzones) {
+            drop_target.addEventListener('dragover', (event) => {
+                let dragged_element = document.querySelector('.dragging');
+                if (event.target.classList.contains('dropzone') && event.target.classList.contains('board-column')) {
+                    drop_target.insertAdjacentElement('afterend', dragged_element);
+                }
+            })
+        }
+        current_status.addEventListener('dragend', () => {
+            current_status.classList.remove('dragging');
+            // if (current_status.parentNode.children[0].classList.contains('empty')){
+            //     card.parentNode.removeChild(card.parentNode.children[0]);
+            // }
         })
     },
     checkStatusEmpty: function(){
     let boardColumnContents = document.querySelectorAll('.board-column-content')
     for (let content of boardColumnContents){
-        if(content.children.length == 0) {
+        if(content.children.length == 1) {
             let new_drop_neighbour = document.createElement('div');
             new_drop_neighbour.classList.add('droppable');
             new_drop_neighbour.classList.add('empty');
@@ -583,8 +607,5 @@ export let dom = {
 
         }
     }
-
-
-
 }
 
