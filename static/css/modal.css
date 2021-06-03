@@ -56,3 +56,7 @@
   .modal-footer{
       background: #978a8a90;
   }
+
+  button {
+      cursor: pointer;
+  }

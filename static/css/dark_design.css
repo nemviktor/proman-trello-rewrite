@@ -181,5 +181,23 @@ form {
     max-width:100px;
 }
 
+.board-column-title {
+    float: left;
+}
+
+.status-remove {
+    text-align: left;
+}
+
+.fa-trash-alt {
+    margin-left: 5%;
+    cursor: pointer;
+}
+
+.fa-unlock, .fa-lock {
+    margin-right: 5%;
+}
+
+
 
 

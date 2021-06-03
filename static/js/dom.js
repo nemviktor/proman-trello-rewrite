@@ -28,9 +28,11 @@ export let dom = {
         clone.querySelector('.board-header').id = board.id;
         clone.querySelector('.board-title').id = `title ${board.id}`;
         if (board.owner !== 0) {
-            clone.querySelector('.board-title').innerText = board.title + " (private)";
+            clone.querySelector('.board-title').innerText = board.title;
+            clone.querySelector('.board-title').insertAdjacentHTML('afterend', '<i class="fa fa-lock" aria-hidden="true"></i>');
         } else {
-            clone.querySelector('.board-title').innerText = board.title + " (public)";
+            clone.querySelector('.board-title').innerText = board.title;
+            clone.querySelector('.board-title').insertAdjacentHTML('afterend', '<i class="fa fa-unlock" aria-hidden="true"></i>');
         }
         clone.querySelector('.board-title').addEventListener('click', dom.renameBoard)
         clone.querySelector('.board-form').id = board.id;
