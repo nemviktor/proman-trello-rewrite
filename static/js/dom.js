@@ -57,6 +57,15 @@ export let dom = {
             .then(response => dom.checkStatusEmpty())
     },
     showStatuses: function (boardId, statuses, callback) {
+/*        let statusContainerAreas = document.querySelectorAll('.board-columns');
+        console.log(statusContainerAreas)
+        if (statusContainerAreas.length > 1){
+            for(let area of statusContainerAreas){
+                if (statusContainerAreas !== null  ) {
+                    statusContainerAreas[boardId-1].innerHTML = '';
+                }
+            }
+        }*/
         for (let status of statuses) {
             dom.createStatus(status, boardId);
         }
@@ -112,7 +121,7 @@ export let dom = {
         clone.querySelector('.card').setAttribute('data_status', `${card.status_id}`);
         clone.querySelector('.card').addEventListener('dragstart', dom.dragging_card);
         clone.querySelector('.card-remove').id = `${card.id}`;
-        clone.querySelector('.card-remove').addEventListener('click',dom.deleteCard);
+        clone.querySelector('.card-remove').addEventListener('click', dom.deleteCard);
         clone.querySelector('.card-title').id = `${card.id}`;
         clone.querySelector('.card-title').innerHTML = `${card.title}`;
 
@@ -132,6 +141,7 @@ export let dom = {
     boardToggle: function(event){
         let board = event.currentTarget.parentNode.nextElementSibling
         board.classList.toggle('hide')
+
     },
     renameBoard: function (event) {
         let title_to_enable_rename = event.target
@@ -358,6 +368,47 @@ export let dom = {
     deleteBoard: function(event){
         let board = event.currentTarget.parentNode;
         board.parentElement.remove();
+      /*  modal.style.display = "none";
+        dataHandler.createNewCard(cardTitle, boardId, statusId, orderId, dom.displayNewCard)
+    },
+    modalDisplay:function (event) {
+        let modal = document.getElementById('myModal');
+        modal.style.display = "block";
+        let x = document.querySelector('.close');
+        x.addEventListener('click', function () {
+            modal.style.display = "none";
+        })
+
+        let closeButton = document.querySelector('#close-button');
+        closeButton.addEventListener('click', function () {
+            //modalBody.innerHTML = "";
+            modal.style.display = "none";
+        })
+        let submitCardButton = document.getElementById('submit-card');
+        submitCardButton.dataset.boardid = event.currentTarget.dataset.boardId;
+        submitCardButton.addEventListener('click', dom.handleNewCard)
+    },
+
+    // initNewCardButton:function () {
+    //     let addCardButton = document.querySelectorAll('.card-add');
+    //     for (let button of addCardButton) {
+    //         button.addEventListener('click', dom.modalDisplay);
+    //     }
+    // },
+    addNewColumn: function(event) {
+      let boardId = event.currentTarget.parentNode.id;
+      let new_status_name = prompt('Name of new status:');
+      let new_order = prompt('Order of the new status column');
+      let data = {'status': {'order_id': new_order,
+                             'title':new_status_name},
+                  'boardID':boardId};
+      dataHandler.addNewColumn(data, function() {
+          dom.loadStatuses(data.boardID);
+      })
+    },
+    deleteBoard: function(event){
+        let board = event.target.parentNode.parentNode.parentNode
+        board.remove()*/
         let data = { 'id' : board.id,
                  'table' : 'boards'
         }

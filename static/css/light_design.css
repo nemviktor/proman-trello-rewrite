@@ -79,7 +79,7 @@ section.board{
     display: inline-block;
     font-size: 20px;
 }
-.board-title, .board-add, .board-status-add, .board-toggle {
+.board-title, .card-add, .board-status-add, .board-toggle {
     display: inline-block;
 }
 
