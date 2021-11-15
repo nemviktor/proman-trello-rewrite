@@ -404,14 +404,16 @@ export let dom = {
     },
     dragging_card: function (event) {
         let card = event.currentTarget;
+        event.stopPropagation();
         card.classList.add('dragging');
         let droppables = document.querySelectorAll('.droppable');
         for (let drop_neighbour of droppables) {
             drop_neighbour.addEventListener('dragover', (event) => {
+                event.stopPropagation();
                 let dragged_element = document.querySelector('.dragging');
                 if (event.target.classList.contains('droppable') && event.target.classList.contains('card')) {
                     drop_neighbour.insertAdjacentElement('afterend', dragged_element);
-                    dom.checkStatusEmpty()
+                    dom.checkStatusEmpty();
                 }
             })
         }
