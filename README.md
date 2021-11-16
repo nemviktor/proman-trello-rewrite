@@ -1,4 +1,4 @@
-# ProMan (sprint 1)
+# ProMan
 
 ## Story
 
@@ -22,9 +22,7 @@ Remember, we need completed user stories and quality work!
 Mark
 ```
 
-Oh well, another nice client.
-
-From the attachments you see that they imagine the app as a "one pager" where all
+The client imagines the app as a "one pager" where all
 the boards are displayed, and when one is opened then the corresponding cards are shown.
 
 Of course, the customer would love to have an application which is easy to use at first
